@@ -1,0 +1,100 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #e3f2fd;
+    margin: 0;
+}
+
+.tracker-container {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 350px;
+}
+
+h2 {
+    color: #0d47a1;
+    margin-top: 0;
+}
+
+.goal-section {
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+#goal-input {
+    width: 80px;
+    padding: 5px;
+    border: 1px solid #bbdefb;
+    border-radius: 5px;
+}
+
+#status {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #1565c0;
+    margin: 15px 0;
+}
+
+.progress-container {
+    width: 100%;
+    background: #eeeeee;
+    border-radius: 15px;
+    height: 25px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+}
+
+#progress-bar {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #4fc3f7, #2196f3);
+    transition: width 0.5s cubic-bezier(0.1, 0.7, 1.0, 0.1);
+}
+
+input[type="number"] {
+    width: 70%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    outline: none;
+}
+
+input:focus {
+    border-color: #2196f3;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+button:hover {
+    background: #1976d2;
+}
+
+#victory-msg {
+    animation: bounce 0.5s infinite alternate;
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+@keyframes bounce {
+    from { transform: scale(1); }
+    to { transform: scale(1.1); }
+}

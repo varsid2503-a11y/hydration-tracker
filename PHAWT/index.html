@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hydration Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="tracker-container">
+        <h2>Hydration Tracker 💧</h2>
+
+        <div class="goal-section">
+            <label>Set Daily Goal (ml): </label>
+            <input type="number" id="goal-input" value="2000">
+        </div>
+        <div id="victory-msg" style="display: none;">
+            <h1>🏆</h1>
+            <p>Goal Reached! Stay Hydrated!</p>
+        </div>
+        <p id="status">Total: 0ml</p>
+        
+        <div class="progress-container">
+            <div id="progress-bar"></div>
+        </div>
+
+        <input type="number" id="water-input" placeholder="Enter ml">
+        <button id="add-btn">Add Water</button>
+        <button id="reset-btn">Reset</button>
+
+        <div class="history-section">
+            <h3>Today's History</h3>
+            <ul id="history-list"></ul>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
