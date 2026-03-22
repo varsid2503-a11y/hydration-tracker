@@ -98,3 +98,27 @@ button:hover {
     from { transform: scale(1); }
     to { transform: scale(1.1); }
 }
+
+.badge-grid {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+.badge {
+    text-align: center;
+    font-size: 0.8rem;
+    padding: 10px;
+    border-radius: 10px;
+    background: #f0f0f0;
+    filter: grayscale(100%); /* This makes it grey */
+    opacity: 0.5;
+    transition: 0.3s;
+}
+
+.badge.unlocked {
+    filter: grayscale(0%); /* This brings back the color */
+    opacity: 1;
+    background: #e0f7fa;
+    border: 1px solid #00acc1;
+}
