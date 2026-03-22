@@ -92,3 +92,24 @@ function checkReminder() {
     }
 }
 setInterval(checkReminder, 60000);
+
+async function fetchFact() {
+    const factElement = document.getElementById('water-fact');
+    const oldFact = localStorage.getItem('lastFact');
+    
+    try {
+        const response = await fetch('https://uselessfacts.jsph.pl/random.json?language=en');
+        const data = await response.json();
+        const newFact = data.text;
+        if (newFact.length < 100 && newFact !== oldFact) {
+            factElement.innerText = newFact;
+            localStorage.setItem('lastFact', newFact); // Save it for next time
+        } else {
+            fetchFact(); // Try again if it's too long or a duplicate
+        }
+    } catch (error) {
+        factElement.innerText = "Water expands by 9% when it freezes into ice!";
+    }
+}
+
+window.onload = fetchFact;
