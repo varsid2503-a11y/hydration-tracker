@@ -1,103 +1,79 @@
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #e0f7fa 0%, #80deea 100%);
+/* ... Keep your existing Pro CSS from before, and add this at the bottom ... */
+
+#help-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    background: #01579b;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 1000;
+}
+
+#achieve-help-btn {
+    position: fixed;
+    bottom: 80px; /* Placed above the '?' button */
+    right: 20px;
+    padding: 10px 15px;
+    background: #ffb300;
+    color: #333;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+#achieve-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    margin: 0;
+    z-index: 2001;
 }
 
-.container {
-    background: white;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    width: 350px;
-    text-align: center;
-}
-
-h1 { color: #01579b; margin-bottom: 20px; }
-
-.setup, .controls { margin: 20px 0; }
-
-input {
-    padding: 10px;
-    border: 2px solid #b2ebf2;
-    border-radius: 8px;
-    width: 80px;
-    text-align: center;
-    outline: none;
-}
-
-input:focus { border-color: #00bcd4; }
-
-.progress-container {
-    background: #eee;
-    border-radius: 20px;
-    height: 25px;
-    width: 100%;
-    margin: 15px 0;
-    overflow: hidden;
-}
-
-#progress-bar {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #4fc3f7, #00bcd4);
-    transition: width 0.5s ease-in-out;
-}
-
-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: transform 0.2s, background 0.2s;
-}
-
-.btn-add { background: #00bcd4; color: white; }
-.btn-add:hover { background: #0097a7; transform: scale(1.05); }
-
-.btn-reset { background: #ff5252; color: white; margin-left: 5px; }
-.btn-reset:hover { background: #d32f2f; }
-
-#fact-container {
-    background: #f1f8e9;
-    border-left: 5px solid #8bc34a;
-    padding: 10px;
-    margin: 20px 0;
+.modal-content ul li {
+    margin: 10px 0;
     font-size: 0.9rem;
 }
 
-.badge-grid {
+#help-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.hidden { display: none !important; }
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    width: 250px;
+    text-align: center;
+}
+
+.modal-content button {
     margin-top: 15px;
-}
-
-.badge {
-    padding: 10px;
-    background: #f5f5f5;
-    border-radius: 10px;
-    font-size: 0.7rem;
-    filter: grayscale(100%);
-    opacity: 0.4;
-    transition: 0.5s;
-}
-
-.badge.unlocked {
-    filter: grayscale(0%);
-    opacity: 1;
-    background: #fff9c4;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-#about-info {
-    margin-top: 30px;
-    font-size: 0.8rem;
-    color: #777;
-    border-top: 1px solid #eee;
-    padding-top: 15px;
+    background: #00bcd4;
+    color: white;
 }
