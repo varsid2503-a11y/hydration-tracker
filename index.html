@@ -2,11 +2,21 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" href="icon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Varsid's Hydration Tracker | Daily Water App</title>
     <meta name="description" content="A professional hydration tracker built by Varsid to help you reach your daily water goals safely.">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<div id="victory-modal" class="hidden">
+    <div class="modal-content victory-card">
+        <div class="trophy-icon">🏆</div>
+        <h2>GOAL REACHED!</h2>
+        <p>You are a Hydration Hero!</p>
+        <button onclick="closeVictory()" class="btn-add">Awesome!</button>
+    </div>
+</div>
 </head>
 <body>
     <div class="container">

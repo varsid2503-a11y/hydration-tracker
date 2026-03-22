@@ -81,3 +81,42 @@ function toggleAchieveModal() {
     const modal = document.getElementById('achieve-modal');
     modal.classList.toggle('hidden');
 }
+
+function updateDisplay() {
+    const goalInput = document.getElementById('goal-input');
+    let goal = parseInt(goalInput.value);
+    
+    if (goal > MAX_LIMIT) {
+        goal = MAX_LIMIT;
+        goalInput.value = MAX_LIMIT;
+    }
+
+    const percent = Math.min((currentTotal / goal) * 100, 100);
+    document.getElementById('total-display').innerText = `${currentTotal}ml / ${goal}ml`;
+    document.getElementById('progress-bar').style.width = percent + "%";
+    
+    // Check for Victory!
+    if (currentTotal >= goal && currentTotal > 0) {
+        document.getElementById('status-msg').innerText = "Goal Reached!";
+        showVictory();
+    } else {
+        document.getElementById('status-msg').innerText = "Keep Drinking!";
+    }
+}
+
+function showVictory() {
+    // 1. Show the Trophy Modal
+    document.getElementById('victory-modal').classList.remove('hidden');
+
+    // 2. Fire the Flower/Confetti Shower!
+    confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#ffd700', '#00bcd4', '#ff5252', '#8bc34a']
+    });
+}
+
+function closeVictory() {
+    document.getElementById('victory-modal').classList.add('hidden');
+}
