@@ -6,6 +6,7 @@ body {
     min-height: 100vh;
     background-color: #e3f2fd;
     margin: 0;
+    position: relative;
 }
 
 .tracker-container {
@@ -111,14 +112,33 @@ button:hover {
     padding: 10px;
     border-radius: 10px;
     background: #f0f0f0;
-    filter: grayscale(100%); /* This makes it grey */
+    filter: grayscale(100%); 
     opacity: 0.5;
     transition: 0.3s;
 }
 
 .badge.unlocked {
-    filter: grayscale(0%); /* This brings back the color */
+    filter: grayscale(0%);  
     opacity: 1;
     background: #e0f7fa;
     border: 1px solid #00acc1;
+}
+
+.help-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #ff9800;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s;
+}
+
+.help-button:hover {
+    background: #f57c00;
 }

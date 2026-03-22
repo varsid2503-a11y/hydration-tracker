@@ -43,6 +43,7 @@ addBtn.addEventListener('click', () => {
         totalWater += amount;
         history.push(amount);
         waterInput.value = '';
+        waterInput.value = '';
         lastDrinkTime = Date.now();
         container.style.backgroundColor = "white";
         updateUI();
@@ -74,3 +75,20 @@ setInterval(() => {
 }, 1000);
 
 updateUI();
+
+helpButton.addEventListener('click', () => {
+    alert(`How to Use the Hydration Tracker:\n\n1. Set your daily water intake goal in milliliters.\n2. Add the amount of water you drink using the input field and 'Add Water' button.\n3. Track your progress with the progress bar and history.\n4. Unlock achievements as you reach milestones!\n5. Reset your progress anytime using the 'Reset' button.`);
+});
+
+let lastHydrationTime = Date.now();
+
+function checkReminder() {
+    const currentTime = Date.now();
+    const minutesSinceLastDrink = (currentTime - lastHydrationTime) / 60000;
+
+    if (minutesSinceLastDrink >= 60) { 
+        document.getElementById('reminder-message').innerText = "⏰ Time for a quick sip!";
+        document.body.style.backgroundColor = "#fff9c4"; 
+    }
+}
+setInterval(checkReminder, 60000);
