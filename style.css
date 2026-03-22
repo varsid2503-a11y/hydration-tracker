@@ -1,144 +1,103 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #e0f7fa 0%, #80deea 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #e3f2fd;
     margin: 0;
-    position: relative;
 }
 
-.tracker-container {
+.container {
     background: white;
     padding: 30px;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    text-align: center;
     width: 350px;
+    text-align: center;
 }
 
-h2 {
-    color: #0d47a1;
-    margin-top: 0;
-}
+h1 { color: #01579b; margin-bottom: 20px; }
 
-.goal-section {
-    margin-bottom: 20px;
-    font-size: 0.9rem;
-    color: #555;
-}
+.setup, .controls { margin: 20px 0; }
 
-#goal-input {
-    width: 80px;
-    padding: 5px;
-    border: 1px solid #bbdefb;
-    border-radius: 5px;
-}
-
-#status {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #1565c0;
-    margin: 15px 0;
-}
-
-.progress-container {
-    width: 100%;
-    background: #eeeeee;
-    border-radius: 15px;
-    height: 25px;
-    margin-bottom: 20px;
-    overflow: hidden;
-    border: 1px solid #ddd;
-}
-
-#progress-bar {
-    width: 0%;
-    height: 100%;
-    background: linear-gradient(90deg, #4fc3f7, #2196f3);
-    transition: width 0.5s cubic-bezier(0.1, 0.7, 1.0, 0.1);
-}
-
-input[type="number"] {
-    width: 70%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 2px solid #e0e0e0;
+input {
+    padding: 10px;
+    border: 2px solid #b2ebf2;
     border-radius: 8px;
+    width: 80px;
+    text-align: center;
     outline: none;
 }
 
-input:focus {
-    border-color: #2196f3;
+input:focus { border-color: #00bcd4; }
+
+.progress-container {
+    background: #eee;
+    border-radius: 20px;
+    height: 25px;
+    width: 100%;
+    margin: 15px 0;
+    overflow: hidden;
+}
+
+#progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #4fc3f7, #00bcd4);
+    transition: width 0.5s ease-in-out;
 }
 
 button {
-    width: 100%;
-    padding: 12px;
-    background: #2196f3;
-    color: white;
+    padding: 10px 20px;
     border: none;
     border-radius: 8px;
-    font-weight: bold;
     cursor: pointer;
-    margin-top: 5px;
-}
-
-button:hover {
-    background: #1976d2;
-}
-
-#victory-msg {
-    animation: bounce 0.5s infinite alternate;
-    color: #2e7d32;
     font-weight: bold;
+    transition: transform 0.2s, background 0.2s;
 }
 
-@keyframes bounce {
-    from { transform: scale(1); }
-    to { transform: scale(1.1); }
+.btn-add { background: #00bcd4; color: white; }
+.btn-add:hover { background: #0097a7; transform: scale(1.05); }
+
+.btn-reset { background: #ff5252; color: white; margin-left: 5px; }
+.btn-reset:hover { background: #d32f2f; }
+
+#fact-container {
+    background: #f1f8e9;
+    border-left: 5px solid #8bc34a;
+    padding: 10px;
+    margin: 20px 0;
+    font-size: 0.9rem;
 }
 
 .badge-grid {
     display: flex;
     justify-content: space-around;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
 .badge {
-    text-align: center;
-    font-size: 0.8rem;
     padding: 10px;
+    background: #f5f5f5;
     border-radius: 10px;
-    background: #f0f0f0;
-    filter: grayscale(100%); 
-    opacity: 0.5;
-    transition: 0.3s;
+    font-size: 0.7rem;
+    filter: grayscale(100%);
+    opacity: 0.4;
+    transition: 0.5s;
 }
 
 .badge.unlocked {
-    filter: grayscale(0%);  
+    filter: grayscale(0%);
     opacity: 1;
-    background: #e0f7fa;
-    border: 1px solid #00acc1;
+    background: #fff9c4;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-.help-button {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #ff9800;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 15px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: background 0.3s;
-}
-
-.help-button:hover {
-    background: #f57c00;
+#about-info {
+    margin-top: 30px;
+    font-size: 0.8rem;
+    color: #777;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
 }
