@@ -91,7 +91,7 @@ button {
     border-radius: 10px;
     font-size: 0.75rem;
     filter: grayscale(100%);
-    opacity: 0.4;
+    opacity: 0.6;
     transition: 0.5s;
 }
 
@@ -117,10 +117,11 @@ button {
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     z-index: 100;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: flex; 
+    justify-content: center; 
+    align-items: center
 }
+
 
 #achieve-help-btn {
     position: fixed;

@@ -19,6 +19,11 @@ function updateDisplay() {
     document.getElementById('total-display').innerText = `${currentTotal}ml / ${dailyGoal}ml`;
     document.getElementById('progress-bar').style.width = percent + "%";
     
+    const lastTime = localStorage.getItem('lastUpdatedTime');
+    if (lastTime) {
+        document.getElementById('last-updated').innerText = `Last drink at: ${lastTime}`;
+    }
+
     if (currentTotal >= dailyGoal && currentTotal > 0) {
         document.getElementById('status-msg').innerText = "Goal Reached!";
         showVictory();
@@ -33,16 +38,51 @@ function addWater() {
     const amount = parseInt(document.getElementById('water-input').value);
     if (isNaN(amount) || amount <= 0) return;
 
+    const sound = document.getElementById('splash-sound');
+    if (sound) {
+        sound.volume = 0.4;
+        sound.currentTime = 0;
+        sound.play();
+    }
+
     currentTotal += amount;
+    
+    const now = new Date();
+    const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    
     localStorage.setItem('waterConsumed', currentTotal);
+    localStorage.setItem('lastUpdatedTime', timeString);
+    
     updateDisplay();
     document.getElementById('water-input').value = '';
+}
+
+function requestNotificationPermission() {
+    Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+            alert("Reminders enabled! I'll remind you every 30 minutes.");
+            startReminders();
+        }
+    });
+}
+
+function startReminders() {
+    setInterval(() => {
+        if (currentTotal < dailyGoal) {
+            new Notification("Time to Hydrate! 💧", {
+                body: "You haven't reached your goal yet. Take a sip!",
+                icon: "logo.png" 
+            });
+        }
+    }, 1800000); 
 }
 
 function resetTracker() {
     if (confirm("Reset everything?")) {
         currentTotal = 0;
         localStorage.setItem('waterConsumed', 0);
+        localStorage.removeItem('lastUpdatedTime');
+        document.getElementById('last-updated').innerText = "";
         updateDisplay();
     }
 }
@@ -83,7 +123,7 @@ function closeVictory() {
 function shareApp() {
     const shareData = {
         title: 'Hydration Tracker Pro',
-        text: `I have drunk ${currentTotal}ml of water today! Can you beat my goal?`,
+        text: `I've drunk ${currentTotal}ml of water! Can you beat my goal?`,
         url: window.location.href
     };
 
@@ -91,7 +131,7 @@ function shareApp() {
         navigator.share(shareData);
     } else {
         navigator.clipboard.writeText(window.location.href);
-        alert("Link copied to clipboard! Share it with your friends.");
+        alert("Link copied to clipboard!");
     }
 }
 
@@ -102,4 +142,7 @@ function toggleModal(id) {
 window.onload = () => {
     updateDisplay();
     fetchWaterFact();
+    if (Notification.permission === "granted") {
+        startReminders();
+    }
 };
