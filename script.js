@@ -94,8 +94,7 @@ function updateDisplay() {
     const percent = Math.min((currentTotal / goal) * 100, 100);
     document.getElementById('total-display').innerText = `${currentTotal}ml / ${goal}ml`;
     document.getElementById('progress-bar').style.width = percent + "%";
-    
-    // Check for Victory!
+
     if (currentTotal >= goal && currentTotal > 0) {
         document.getElementById('status-msg').innerText = "Goal Reached!";
         showVictory();
@@ -105,10 +104,8 @@ function updateDisplay() {
 }
 
 function showVictory() {
-    // 1. Show the Trophy Modal
     document.getElementById('victory-modal').classList.remove('hidden');
 
-    // 2. Fire the Flower/Confetti Shower!
     confetti({
         particleCount: 150,
         spread: 70,
