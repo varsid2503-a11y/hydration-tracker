@@ -24,6 +24,9 @@ A high-performance, interactive web application designed to help users reach the
 - 🏆 **Hero**: Hit your 100% daily goal.
 - 🌊 **Max**: Reach the absolute 4000ml safety limit.
 
+## 🐛 Bug Fixes
+* **Persistence Issue (March 2026):** Fixed a bug where the custom Daily Goal would reset to 2000ml after a page refresh. Added `localStorage` support for the `goal-input` field so user settings are preserved.
+
 ## See the Result
-If you wannt to run the web app, copy the below link paste it it in your "The Address Bar"(top search bar):
+If you wannt to run the web app, copy the below link paste it it in your *The Address Bar*(search bar -> located at the top of chrom browser):
 https://varsid2503-a11y.github.io/hydration-tracker/
