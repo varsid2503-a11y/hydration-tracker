@@ -18,7 +18,7 @@ function toggleDarkMode() {
 
 function updateDisplay() {
     const goalInput = document.getElementById('goal-input');
-    dailyGoal = parseInt(goalInput.value);
+    dailyGoal = parseInt(goalInput.value) || 2000;
     
     if (dailyGoal > MAX_LIMIT) {
         dailyGoal = MAX_LIMIT;
@@ -38,12 +38,14 @@ function updateDisplay() {
 
     if (currentTotal >= dailyGoal && currentTotal > 0) {
         document.getElementById('status-msg').innerText = "Goal Reached!";
+        updateStreak();
         showVictory();
     } else {
         document.getElementById('status-msg').innerText = "Keep Drinking!";
     }
     
     checkBadges();
+    renderStreak();
 }
 
 function addWater() {
@@ -58,7 +60,6 @@ function addWater() {
     }
 
     currentTotal += amount;
-    
     const now = new Date();
     const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     
@@ -69,6 +70,31 @@ function addWater() {
     document.getElementById('water-input').value = '';
 }
 
+function updateStreak() {
+    const today = new Date().toDateString();
+    const lastGoalDate = localStorage.getItem('lastGoalDate');
+    let streak = parseInt(localStorage.getItem('streakCount')) || 0;
+
+    if (lastGoalDate === today) return;
+
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    if (lastGoalDate === yesterday.toDateString()) {
+        streak++;
+    } else {
+        streak = 1;
+    }
+
+    localStorage.setItem('streakCount', streak);
+    localStorage.setItem('lastGoalDate', today);
+}
+
+function renderStreak() {
+    const streak = localStorage.getItem('streakCount') || 0;
+    document.getElementById('streak-count').innerText = streak;
+}
+
 function handleReminderBtn() {
     const btn = document.getElementById('reminder-btn');
     if (reminderInterval) {
@@ -76,19 +102,14 @@ function handleReminderBtn() {
         btn.innerText = "Enable Reminders 🔔";
         btn.style.background = "#f39c12";
     } else {
-        requestNotificationPermission();
+        Notification.requestPermission().then(p => {
+            if (p === "granted") {
+                btn.innerText = "Disable Reminders 🔕";
+                btn.style.background = "#e74c3c";
+                startReminders();
+            }
+        });
     }
-}
-
-function requestNotificationPermission() {
-    Notification.requestPermission().then(permission => {
-        if (permission === "granted") {
-            const btn = document.getElementById('reminder-btn');
-            btn.innerText = "Disable Reminders 🔕";
-            btn.style.background = "#e74c3c";
-            startReminders();
-        }
-    });
 }
 
 function startReminders() {
@@ -127,16 +148,14 @@ function checkBadges() {
 async function fetchWaterFact() {
     const factElement = document.getElementById('water-fact');
     const spinner = document.getElementById('spinner');
-    
     factElement.classList.add('hidden');
     spinner.classList.remove('hidden');
-
     try {
         const res = await fetch('https://uselessfacts.jsph.pl/api/v2/facts/random');
         const data = await res.json();
         factElement.innerText = data.text;
     } catch (e) {
-        factElement.innerText = "Water is life!";
+        factElement.innerText = "Water is essential for life!";
     } finally {
         spinner.classList.add('hidden');
         factElement.classList.remove('hidden');
@@ -156,9 +175,10 @@ function closeVictory() {
 }
 
 function shareApp() {
+    const streak = localStorage.getItem('streakCount') || 0;
     const shareData = {
         title: 'Hydration Tracker',
-        text: `I've drunk ${currentTotal}ml today!`,
+        text: `I've drunk ${currentTotal}ml today! My streak is ${streak} days!`,
         url: window.location.href
     };
     if (navigator.share) navigator.share(shareData);
@@ -172,39 +192,5 @@ function toggleModal(id) {
 window.onload = () => {
     updateDisplay();
     fetchWaterFact();
-    if (Notification.permission === "granted") {
-        startReminders();
-    }
+    if (Notification.permission === "granted") startReminders();
 };
-
-function updateStreak() {
-    const today = new Date().toDateString();
-    const lastGoalDate = localStorage.getItem('lastGoalDate');
-    let streak = parseInt(localStorage.getItem('streakCount')) || 0;
-
-    if (lastGoalDate === today) return;
-
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    if (lastGoalDate === yesterday.toDateString()) {
-        streak++;
-    } else {
-        streak = 1;
-    }
-
-    localStorage.setItem('streakCount', streak);
-    localStorage.setItem('lastGoalDate', today);
-    renderStreak();
-}
-
-function renderStreak() {
-    const streak = localStorage.getItem('streakCount') || 0;
-    document.getElementById('streak-count').innerText = streak;
-}
-
-if (currentTotal >= dailyGoal && currentTotal > 0) {
-    document.getElementById('status-msg').innerText = "Goal Reached!";
-    updateStreak();
-    showVictory();
-}

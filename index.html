@@ -13,7 +13,12 @@
     <div class="container">
         <div class="header-row">
             <h1>Hydration Tracker 💧</h1>
-            <button onclick="toggleDarkMode()" id="dark-mode-btn" title="Toggle Dark Mode">🌙</button>
+            <button onclick="toggleDarkMode()" id="dark-mode-btn">🌙</button>
+        </div>
+
+        <div class="streak-container">
+            <span id="streak-icon">🔥</span>
+            <span id="streak-count">0</span> Day Streak
         </div>
 
         <div class="setup">
@@ -25,19 +30,17 @@
             <h2 id="status-msg">Keep Drinking!</h2>
             <h3 id="total-display">0ml / 2000ml</h3>
             <p id="last-updated"></p>
-            <div class="streak-container">
-                <span id="streak-icon">🔥</span>
-                <span id="streak-count">0</span> Day Streak
-            </div>
             <div class="progress-container">
                 <div id="progress-bar"></div>
             </div>
         </div>
 
         <div class="controls">
-            <input type="number" id="water-input" placeholder="ml">
-            <button onclick="addWater()" class="btn-add">Add</button>
-            <button onclick="resetTracker()" class="btn-reset">Reset</button>
+            <div class="input-row">
+                <input type="number" id="water-input" placeholder="ml">
+                <button onclick="addWater()" class="btn-add">Add</button>
+                <button onclick="resetTracker()" class="btn-reset">Reset</button>
+            </div>
             <button id="reminder-btn" onclick="handleReminderBtn()" class="btn-toggle">Enable Reminders 🔔</button>
             <button onclick="shareApp()" class="btn-share">Share 🔗</button>
         </div>
@@ -45,7 +48,7 @@
         <div id="fact-container">
             <div class="fact-header">
                 <strong>Did you know?</strong>
-                <button onclick="fetchWaterFact()" id="refresh-fact-btn" title="New Fact">🔄</button>
+                <button onclick="fetchWaterFact()" id="refresh-fact-btn">🔄</button>
             </div>
             <div id="fact-content">
                 <div id="spinner" class="spinner hidden"></div>
@@ -63,17 +66,18 @@
     <button id="help-btn" onclick="toggleModal('help-modal')">?</button>
 
     <div id="victory-modal" class="hidden" onclick="closeVictory()">
-        <div class="modal-content">
+        <div class="modal-content" onclick="event.stopPropagation()">
             <h1>🏆</h1>
             <h2>GOAL REACHED!</h2>
-            <button class="btn-add">Close</button>
+            <button onclick="closeVictory()" class="btn-add" style="width: 100%">Close</button>
         </div>
     </div>
 
     <div id="help-modal" class="hidden" onclick="toggleModal('help-modal')">
-        <div class="modal-content">
+        <div class="modal-content" onclick="event.stopPropagation()">
             <h3>How to Use</h3>
             <p>Enter water in ml and hit Add!</p>
+            <button onclick="toggleModal('help-modal')" class="btn-add" style="width: 100%">Got it!</button>
         </div>
     </div>
 
