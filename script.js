@@ -2,6 +2,7 @@ const MAX_LIMIT = 4000;
 let currentTotal = parseInt(localStorage.getItem('waterConsumed')) || 0;
 let dailyGoal = parseInt(localStorage.getItem('dailyGoal')) || 2000;
 let reminderInterval = null;
+let snoozeMinutes = 10;
 
 document.getElementById('goal-input').value = dailyGoal;
 
@@ -198,3 +199,44 @@ window.onload = () => {
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js');
 }
+
+function showHydrationNotification() {
+  if (Notification.permission === "granted") {
+    const notification = new Notification("Time to Hydrate!", {
+      body: "Click to log water or Snooze for " + snoozeMinutes + " mins.",
+      requireInteraction: true,
+      actions: [
+        { action: "snooze", title: "Snooze" }
+      ]
+    });
+
+    notification.onclick = () => {
+      window.focus();
+      notification.close();
+    };
+
+    notification.onaction = (e) => {
+      if (e.action === "snooze") {
+        snoozeNotification();
+      }
+      notification.close();
+    };
+  }
+}
+
+function snoozeNotification() {
+  const ms = snoozeMinutes * 60 * 1000;
+  setTimeout(() => {
+    showHydrationNotification();
+  }, ms);
+}
+
+function updateSnoozeTime(newMins) {
+  snoozeMinutes = parseInt(newMins);
+  localStorage.setItem('snoozeTime', snoozeMinutes);
+}
+
+window.onload = () => {
+  const savedSnooze = localStorage.getItem('snoozeTime');
+  if (savedSnooze) snoozeMinutes = parseInt(savedSnooze);
+};
