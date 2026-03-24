@@ -218,3 +218,41 @@ input:checked + .slider:before {
   color: white;
   border-color: #ff4d4d;
 }
+
+.settings-panel {
+    display: flex;
+    justify-content: space-around;
+    background: rgba(0,0,0,0.25);
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 0.7rem;
+    color: #90e0ef;
+    text-transform: uppercase;
+}
+
+.input-group input {
+    width: 50px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid #48cae4;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    padding: 3px;
+    font-weight: bold;
+}
+
+.chart-container {
+    margin: 20px 0;
+    background: rgba(255,255,255,0.05);
+    padding: 10px;
+    border-radius: 15px;
+    height: 180px;
+}
