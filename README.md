@@ -2,21 +2,29 @@
 
 A high-performance, interactive web application designed to help users reach their daily water goals with style and safety. This project features real-time progress tracking, gamified achievements, and a celebration system.
 
-## 🌟 New "Victory" Features
+🌟 New "Pro" Features (Add these)
+PWA - Native App Experience: Install the tracker as a standalone app on Android, iOS, Windows, and Lenovo devices. It works without a browser address bar!
 
-- **Confetti Celebration**: Reaching your goal triggers a high-quality "flower shower" animation using the canvas-confetti library.
-- **Victory Trophy**: A custom modal with a "pop-in" animation appears when you become a "Hydration Hero."
-- **Advanced Safety**: Hard-coded logic prevents users from logging more than 4000ml, ensuring healthy habits.
-- **Interactive UI**: Includes "How to Use" and "Achievement Guide" popups for a smooth user experience.
+Daily Streak System: A "persistence engine" that tracks how many days in a row you hit your goal. Missing a day resets the 🔥 icon.
 
-## 🛠️ Tech Stack
+Deep-Sea Dark Mode: A custom-themed toggle that saves your preference (Light or Dark) even after the app is closed.
 
-- **HTML5**: Semantic structure with custom Meta tags for Google SEO.
-- **CSS3**: Advanced Flexbox layouts, Keyframe animations, and Z-index management.
-- **JavaScript (ES6)**:
-  - *Async API*: Fetches daily water facts.
-  - **LocalStorage**: Saves your badges and progress even after a refresh.
-  - **Library Integration**: Uses canvas-confetti for professional-grade animations.
+Interactive Refresh Fact: A high-touch button that fetches random water trivia via an external API with a built-in loading spinner.
+
+Liquid Shimmer Animation: The progress bar now features a CSS-animated "wave" that makes the water level look like it's sloshing.
+
+🛠️ Tech Stack (Update this)
+PWA Architecture:
+
+manifest.json: For cross-platform installation and home screen icons.
+
+Service Workers (sw.js): Enables basic offline caching for a faster, app-like feel.
+
+JavaScript (ES6+):
+
+Notification API: Sends browser-level reminders every 30 minutes.
+
+Logic Gates: Advanced date-comparison logic to calculate daily streaks.
 
 ## 🎖️ Achievement System
 
@@ -30,3 +38,5 @@ A high-performance, interactive web application designed to help users reach the
 ## See the Result
 If you wannt to run the web app, copy the below link paste it it in your *The Address Bar*(search bar -> located at the top of chrom browser):
 https://varsid2503-a11y.github.io/hydration-tracker/
+
+*Once you open the link, click the "Install" icon in your address bar (on Desktop) or select "Add to Home Screen" (on Mobile) to use it as a real app!*

@@ -194,3 +194,7 @@ window.onload = () => {
     fetchWaterFact();
     if (Notification.permission === "granted") startReminders();
 };
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js');
+}
