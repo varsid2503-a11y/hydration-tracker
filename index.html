@@ -7,82 +7,49 @@
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="icon.png">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
-<body>
-
-    <div class="container">
-        <div class="header-row">
-            <h1>Hydration Tracker 💧</h1>
-            <button onclick="toggleDarkMode()" id="dark-mode-btn">🌙</button>
-        </div>
-
-        <div class="streak-container">
-            <span id="streak-icon">🔥</span>
-            <span id="streak-count">0</span> Day Streak
-        </div>
-
-        <div class="setup">
-            <label>Goal (ml):</label>
-            <input type="number" id="goal-input" onchange="updateDisplay()">
-        </div>
-
-        <div class="display">
-            <h2 id="status-msg">Keep Drinking!</h2>
-            <h3 id="total-display">0ml / 2000ml</h3>
-            <p id="last-updated"></p>
-            <div class="progress-container">
-                <div id="progress-bar"></div>
-            </div>
-        </div>
-
-        <div class="controls">
-            <div class="input-row">
-                <input type="number" id="water-input" placeholder="ml">
-                <button onclick="addWater()" class="btn-add">Add</button>
-                <button onclick="resetTracker()" class="btn-reset">Reset</button>
-            </div>
-            <button id="reminder-btn" onclick="handleReminderBtn()" class="btn-toggle">Enable Reminders 🔔</button>
-            <button onclick="shareApp()" class="btn-share">Share 🔗</button>
-        </div>
-
-        <div id="fact-container">
-            <div class="fact-header">
-                <strong>Did you know?</strong>
-                <button onclick="fetchWaterFact()" id="refresh-fact-btn">🔄</button>
-            </div>
-            <div id="fact-content">
-                <div id="spinner" class="spinner hidden"></div>
-                <p id="water-fact"></p>
-            </div>
-        </div>
-
-        <div class="badge-grid">
-            <div id="badge-sip" class="badge">🌱</div>
-            <div id="badge-hero" class="badge">🏆</div>
-            <div id="badge-max" class="badge">🌊</div>
-        </div>
+<body class="flex">
+  <div class="container">
+    <h1>Hydration Tracker Pro</h1>
+    
+    <div class="progress-circle">
+      <span id="percentage-text">0%</span>
     </div>
+
+    <div id="total-display">0ml</div>
+    <p>Goal: 2000ml</p>
+
+    <div class="button-group">
+      <button onclick="addWater(250)">+ 250ml</button>
+      <button onclick="addWater(500)">+ 500ml</button>
+    </div>
+
+    <div class="focus-mode-container">
+  <label class="switch">
+    <input type="checkbox" id="focus-toggle" onchange="toggleFocusMode()">
+    <span class="slider"></span>
+  </label>
+  <span>Focus Mode (45m)</span>
+</div>
 
     <button id="help-btn" onclick="toggleModal('help-modal')">?</button>
+  </div>
 
-    <div id="victory-modal" class="hidden" onclick="closeVictory()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <h1>🏆</h1>
-            <h2>GOAL REACHED!</h2>
-            <button onclick="closeVictory()" class="btn-add" style="width: 100%">Close</button>
-        </div>
+  <div id="victory-modal" class="hidden" onclick="closeVictory()">
+    <div class="modal-content">
+      <h2>Goal Reached! 🏆</h2>
+      <p>Great job staying hydrated today!</p>
     </div>
+  </div>
 
-    <div id="help-modal" class="hidden" onclick="toggleModal('help-modal')">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <h3>How to Use</h3>
-            <p>Enter water in ml and hit Add!</p>
-            <button onclick="toggleModal('help-modal')" class="btn-add" style="width: 100%">Got it!</button>
-        </div>
-    </div>
+  <div class="history-container">
+  <h3>Recent Activity</h3>
+  <ul id="history-list">
+    </ul>
+</div>
 
-    <audio id="splash-sound" src="splash.mp3" preload="auto"></audio>
-    <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
