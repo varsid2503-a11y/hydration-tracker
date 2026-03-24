@@ -21,7 +21,10 @@ window.onload = () => {
 
 function addWater(amount) {
   currentTotal += amount;
-  intakeLog.push({ time: new Date().toLocaleTimeString(), amount: amount });
+  intakeLog.push({ 
+    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), 
+    amount: amount 
+  });
   
   if ("vibrate" in navigator) {
     navigator.vibrate(50);
@@ -38,7 +41,8 @@ function checkGoal() {
       confetti({
         particleCount: 150,
         spread: 70,
-        origin: { y: 0.6 }
+        origin: { y: 0.6 },
+        colors: ['#00b4d8', '#caf0f8', '#90e0ef']
       });
     }
     showVictoryModal();
@@ -47,12 +51,12 @@ function checkGoal() {
 
 function updateUI() {
   const percentage = Math.min(Math.floor((currentTotal / dailyGoal) * 100), 100);
+  
   const percentText = document.getElementById('percentage-text');
   if (percentText) percentText.innerText = percentage + "%";
   
   const circle = document.querySelector('.progress-circle');
   if (circle) {
-    circle.style.setProperty('--fill-height', percentage + '%');
     circle.style.background = `radial-gradient(closest-side, white 79%, transparent 80% 100%), conic-gradient(#00b4d8 ${percentage}%, #caf0f8 0%)`;
   }
   
@@ -62,53 +66,9 @@ function updateUI() {
   const list = document.getElementById('history-list');
   if (list) {
     list.innerHTML = intakeLog.slice(-3).reverse().map(item => 
-      `<li>Drank ${item.amount}ml at ${item.time}</li>`
+      `<li>Dropped ${item.amount}ml at ${item.time}</li>`
     ).join('');
   }
-}
-
-function saveData() {
-  localStorage.setItem('currentTotal', currentTotal);
-  localStorage.setItem('intakeLog', JSON.stringify(intakeLog));
-}
-
-function showHydrationNotification() {
-  if (Notification.permission === "granted" && currentTotal < dailyGoal && !isFocusMode) {
-    const notification = new Notification("Time to Hydrate!", {
-      body: "Drink " + glassSize + "ml or Snooze for " + snoozeMinutes + " mins.",
-      requireInteraction: true,
-      icon: "icon.png",
-      actions: [
-        { action: "snooze", title: "Snooze" }
-      ]
-    });
-
-    notification.onclick = () => {
-      window.focus();
-      addWater(glassSize);
-      notification.close();
-    };
-
-    notification.onaction = (e) => {
-      if (e.action === "snooze") {
-        snoozeNotification();
-      }
-      notification.close();
-    };
-  }
-}
-
-function snoozeNotification() {
-  const ms = snoozeMinutes * 60 * 1000;
-  setTimeout(() => {
-    showHydrationNotification();
-  }, ms);
-}
-
-function startReminders() {
-  setInterval(() => {
-    showHydrationNotification();
-  }, 900000);
 }
 
 function toggleFocusMode() {
@@ -119,20 +79,40 @@ function toggleFocusMode() {
     focusTimer = setTimeout(() => {
       isFocusMode = false;
       if (checkbox) checkbox.checked = false;
-      new Notification("Focus Mode Over", { body: "Reminders are back on!" });
+      new Notification("Focus Mode Over", { body: "Hydration reminders are back on!" });
     }, 45 * 60 * 1000);
   } else {
     clearTimeout(focusTimer);
   }
 }
 
-function updateSnoozeTime(newMins) {
-  snoozeMinutes = parseInt(newMins);
-  localStorage.setItem('snoozeTime', snoozeMinutes);
+function showHydrationNotification() {
+  if (Notification.permission === "granted" && currentTotal < dailyGoal && !isFocusMode) {
+    const notification = new Notification("Time to Hydrate!", {
+      body: `Goal: ${dailyGoal}ml. You are at ${currentTotal}ml.`,
+      icon: "icon.png",
+      requireInteraction: true
+    });
+
+    notification.onclick = () => {
+      window.focus();
+      addWater(glassSize);
+      notification.close();
+    };
+  }
+}
+
+function startReminders() {
+  setInterval(showHydrationNotification, 900000);
+}
+
+function saveData() {
+  localStorage.setItem('currentTotal', currentTotal);
+  localStorage.setItem('intakeLog', JSON.stringify(intakeLog));
 }
 
 function resetApp() {
-  if (confirm("Reset all progress for today?")) {
+  if (confirm("Are you sure you want to reset today's progress?")) {
     currentTotal = 0;
     intakeLog = [];
     saveData();

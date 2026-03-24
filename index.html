@@ -3,53 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Varsid's Hydration Tracker</title>
-    <link rel="manifest" href="manifest.json">
+    <title>HydratePro</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="icon.png">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <link rel="manifest" href="manifest.json">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
-<body class="flex">
-  <div class="container">
-    <h1>Hydration Tracker Pro</h1>
-    
-    <div class="progress-circle">
-      <span id="percentage-text">0%</span>
+<body>
+
+    <div class="container">
+        <h1>Hydration Tracker Pro</h1>
+
+        <div class="progress-circle">
+            <span id="percentage-text">0%</span>
+        </div>
+
+        <div id="total-display">0ml</div>
+        <div class="goal-text">Goal: 2000ml</div>
+
+        <div class="button-group">
+            <button onclick="addWater(250)">+ 250ml</button>
+            <button onclick="addWater(500)">+ 500ml</button>
+        </div>
+
+        <div class="focus-mode-container">
+            <label class="switch">
+                <input type="checkbox" id="focus-toggle" onchange="toggleFocusMode()">
+                <span class="slider"></span>
+            </label>
+            <span>Focus Mode (45m)</span>
+        </div>
+
+        <div class="history-container">
+            <h3>Recent Activity</h3>
+            <ul id="history-list">
+                </ul>
+        </div>
+
+        <button onclick="resetApp()" class="reset-btn">Reset Progress</button>
     </div>
 
-    <div id="total-display">0ml</div>
-    <p>Goal: 2000ml</p>
-
-    <div class="button-group">
-      <button onclick="addWater(250)">+ 250ml</button>
-      <button onclick="addWater(500)">+ 500ml</button>
+    <div id="victory-modal" class="hidden">
+        <div class="modal-content">
+            <div style="font-size: 3rem;">🏆</div>
+            <h2>GOAL REACHED!</h2>
+            <p>You've stayed perfectly hydrated today.</p>
+            <button onclick="closeVictory()">Close</button>
+        </div>
     </div>
 
-    <div class="focus-mode-container">
-  <label class="switch">
-    <input type="checkbox" id="focus-toggle" onchange="toggleFocusMode()">
-    <span class="slider"></span>
-  </label>
-  <span>Focus Mode (45m)</span>
-</div>
-
-    <button id="help-btn" onclick="toggleModal('help-modal')">?</button>
-  </div>
-
-  <div id="victory-modal" class="hidden" onclick="closeVictory()">
-    <div class="modal-content">
-      <h2>Goal Reached! 🏆</h2>
-      <p>Great job staying hydrated today!</p>
-    </div>
-  </div>
-
-  <div class="history-container">
-  <h3>Recent Activity</h3>
-  <ul id="history-list">
-    </ul>
-</div>
-
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
