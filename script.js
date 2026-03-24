@@ -5,6 +5,17 @@ let reminderInterval = null;
 
 document.getElementById('goal-input').value = dailyGoal;
 
+if (localStorage.getItem('darkMode') === 'enabled') {
+    document.body.classList.add('dark-mode');
+    document.getElementById('dark-mode-btn').innerText = '☀️';
+}
+
+function toggleDarkMode() {
+    const isDark = document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+    document.getElementById('dark-mode-btn').innerText = isDark ? '☀️' : '🌙';
+}
+
 function updateDisplay() {
     const goalInput = document.getElementById('goal-input');
     dailyGoal = parseInt(goalInput.value);
@@ -63,7 +74,7 @@ function handleReminderBtn() {
     if (reminderInterval) {
         stopReminders();
         btn.innerText = "Enable Reminders 🔔";
-        btn.style.background = "#ff9800";
+        btn.style.background = "#f39c12";
     } else {
         requestNotificationPermission();
     }
@@ -74,10 +85,8 @@ function requestNotificationPermission() {
         if (permission === "granted") {
             const btn = document.getElementById('reminder-btn');
             btn.innerText = "Disable Reminders 🔕";
-            btn.style.background = "#f44336";
+            btn.style.background = "#e74c3c";
             startReminders();
-        } else {
-            alert("Please allow notifications in your browser settings to use this feature!");
         }
     });
 }
@@ -87,8 +96,8 @@ function startReminders() {
     reminderInterval = setInterval(() => {
         if (currentTotal < dailyGoal) {
             new Notification("Time to Hydrate! 💧", {
-                body: "You haven't reached your goal yet. Take a sip!",
-                icon: "logo.png" 
+                body: "Take a sip to reach your goal!",
+                icon: "icon.png" 
             });
         }
     }, 1800000); 
@@ -117,23 +126,20 @@ function checkBadges() {
 
 async function fetchWaterFact() {
     const factElement = document.getElementById('water-fact');
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000); 
+    const spinner = document.getElementById('spinner');
+    
+    factElement.classList.add('hidden');
+    spinner.classList.remove('hidden');
 
     try {
-        const res = await fetch('https://uselessfacts.jsph.pl/api/v2/facts/random', { signal: controller.signal });
+        const res = await fetch('https://uselessfacts.jsph.pl/api/v2/facts/random');
         const data = await res.json();
         factElement.innerText = data.text;
     } catch (e) {
-        const backupFacts = [
-            "Your brain is about 75% water.",
-            "Water expands by 9% when it freezes.",
-            "A person can survive about a month without food, but only a week without water.",
-            "Water regulates the earth's temperature."
-        ];
-        factElement.innerText = backupFacts[Math.floor(Math.random() * backupFacts.length)];
+        factElement.innerText = "Water is life!";
     } finally {
-        clearTimeout(timeoutId);
+        spinner.classList.add('hidden');
+        factElement.classList.remove('hidden');
     }
 }
 
@@ -141,12 +147,7 @@ function showVictory() {
     const modal = document.getElementById('victory-modal');
     if (modal.classList.contains('hidden')) {
         modal.classList.remove('hidden');
-        confetti({
-            particleCount: 150,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: ['#ffd700', '#00bcd4', '#ff5252', '#8bc34a']
-        });
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     }
 }
 
@@ -156,17 +157,12 @@ function closeVictory() {
 
 function shareApp() {
     const shareData = {
-        title: 'Hydration Tracker Pro',
-        text: `I've drunk ${currentTotal}ml of water! Can you beat my goal?`,
+        title: 'Hydration Tracker',
+        text: `I've drunk ${currentTotal}ml today!`,
         url: window.location.href
     };
-
-    if (navigator.share) {
-        navigator.share(shareData);
-    } else {
-        navigator.clipboard.writeText(window.location.href);
-        alert("Link copied to clipboard!");
-    }
+    if (navigator.share) navigator.share(shareData);
+    else alert("Link copied!");
 }
 
 function toggleModal(id) {
@@ -177,9 +173,6 @@ window.onload = () => {
     updateDisplay();
     fetchWaterFact();
     if (Notification.permission === "granted") {
-        const btn = document.getElementById('reminder-btn');
-        btn.innerText = "Disable Reminders 🔕";
-        btn.style.background = "#f44336";
         startReminders();
     }
 };

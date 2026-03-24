@@ -5,90 +5,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Varsid's Hydration Tracker</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" href="icon.png">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
     <div class="container">
-        <h1>Hydration Tracker 💧</h1>
+        <div class="header-row">
+            <h1>Hydration Tracker 💧</h1>
+            <button onclick="toggleDarkMode()" id="dark-mode-btn" title="Toggle Dark Mode">🌙</button>
+        </div>
 
         <div class="setup">
-            <label for="goal-input">Daily Goal (ml):</label>
-            <input type="number" id="goal-input" value="2000" min="500" step="100" onchange="updateDisplay()">
+            <label>Goal (ml):</label>
+            <input type="number" id="goal-input" onchange="updateDisplay()">
         </div>
 
         <div class="display">
             <h2 id="status-msg">Keep Drinking!</h2>
             <h3 id="total-display">0ml / 2000ml</h3>
             <p id="last-updated"></p>
-
             <div class="progress-container">
                 <div id="progress-bar"></div>
             </div>
         </div>
 
         <div class="controls">
-            <input type="number" id="water-input" placeholder="ml" min="1">
-            <button onclick="addWater()" class="btn-add">Add Water</button>
+            <input type="number" id="water-input" placeholder="ml">
+            <button onclick="addWater()" class="btn-add">Add</button>
             <button onclick="resetTracker()" class="btn-reset">Reset</button>
-            
             <button id="reminder-btn" onclick="handleReminderBtn()" class="btn-toggle">Enable Reminders 🔔</button>
-            <button onclick="shareApp()" class="btn-share">Share Progress 🔗</button>
+            <button onclick="shareApp()" class="btn-share">Share 🔗</button>
         </div>
 
         <div id="fact-container">
-            <strong>Did you know?</strong>
-            <p id="water-fact">Loading fact...</p>
+            <div class="fact-header">
+                <strong>Did you know?</strong>
+                <button onclick="fetchWaterFact()" id="refresh-fact-btn" title="New Fact">🔄</button>
+            </div>
+            <div id="fact-content">
+                <div id="spinner" class="spinner hidden"></div>
+                <p id="water-fact"></p>
+            </div>
         </div>
 
         <div class="badge-grid">
-            <div id="badge-sip" class="badge">🌱<br>Sip</div>
-            <div id="badge-hero" class="badge">🏆<br>Hero</div>
-            <div id="badge-max" class="badge">🌊<br>Max</div>
-        </div>
-
-        <div id="about-info">
-            <p>Designed by Varsid</p>
+            <div id="badge-sip" class="badge">🌱</div>
+            <div id="badge-hero" class="badge">🏆</div>
+            <div id="badge-max" class="badge">🌊</div>
         </div>
     </div>
 
     <button id="help-btn" onclick="toggleModal('help-modal')">?</button>
-    <button id="achieve-help-btn" onclick="toggleModal('achieve-modal')">🏆 How to Earn Badges</button>
 
-    <div id="victory-modal" class="hidden">
-        <div class="modal-content victory-card">
-            <div class="trophy-icon">🏆</div>
+    <div id="victory-modal" class="hidden" onclick="closeVictory()">
+        <div class="modal-content">
+            <h1>🏆</h1>
             <h2>GOAL REACHED!</h2>
-            <p>You are a Hydration Hero!</p>
-            <button onclick="closeVictory()" class="btn-add">Awesome!</button>
+            <button class="btn-add">Close</button>
         </div>
     </div>
 
-    <div id="help-modal" class="hidden">
+    <div id="help-modal" class="hidden" onclick="toggleModal('help-modal')">
         <div class="modal-content">
-            <h3>How to Use 💡</h3>
-            <p>1. Set your goal (Max 4000ml).</p>
-            <p>2. Enter how much you drank and click Add.</p>
-            <p>3. Unlock badges as you go!</p>
-            <button onclick="toggleModal('help-modal')">Close</button>
-        </div>
-    </div>
-
-    <div id="achieve-modal" class="hidden">
-        <div class="modal-content">
-            <h3>Badges 🎖️</h3>
-            <ul class="achievement-list">
-                <li>🌱 <strong>Sip:</strong> Log your first drink.</li>
-                <li>🏆 <strong>Hero:</strong> Reach your daily goal.</li>
-                <li>🌊 <strong>Max:</strong> Reach 4000ml!</li>
-            </ul>
-            <button onclick="toggleModal('achieve-modal')">Close</button>
+            <h3>How to Use</h3>
+            <p>Enter water in ml and hit Add!</p>
         </div>
     </div>
 
     <audio id="splash-sound" src="splash.mp3" preload="auto"></audio>
-
     <script src="script.js"></script>
 </body>
 </html>
