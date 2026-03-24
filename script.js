@@ -176,3 +176,35 @@ window.onload = () => {
         startReminders();
     }
 };
+
+function updateStreak() {
+    const today = new Date().toDateString();
+    const lastGoalDate = localStorage.getItem('lastGoalDate');
+    let streak = parseInt(localStorage.getItem('streakCount')) || 0;
+
+    if (lastGoalDate === today) return;
+
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    if (lastGoalDate === yesterday.toDateString()) {
+        streak++;
+    } else {
+        streak = 1;
+    }
+
+    localStorage.setItem('streakCount', streak);
+    localStorage.setItem('lastGoalDate', today);
+    renderStreak();
+}
+
+function renderStreak() {
+    const streak = localStorage.getItem('streakCount') || 0;
+    document.getElementById('streak-count').innerText = streak;
+}
+
+if (currentTotal >= dailyGoal && currentTotal > 0) {
+    document.getElementById('status-msg').innerText = "Goal Reached!";
+    updateStreak();
+    showVictory();
+}

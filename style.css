@@ -162,3 +162,56 @@ input[type="number"] {
     padding: 2rem;
     border-radius: 20px;
 }
+
+#progress-bar {
+    background: linear-gradient(90deg, #0093e9, #80d0c7);
+    height: 100%;
+    width: 0%;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+#progress-bar::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.4) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    animation: wave-shimmer 2s infinite;
+}
+
+@keyframes wave-shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.streak-container {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #ff9800;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+body.dark-mode .streak-container {
+    color: #ffca28;
+    text-shadow: 0 0 10px rgba(255, 202, 40, 0.4);
+}
