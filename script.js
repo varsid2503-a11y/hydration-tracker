@@ -121,7 +121,7 @@ function startReminders() {
                 icon: "icon.png" 
             });
         }
-    }, 1800000); 
+    }, 900000); 
 }
 
 function stopReminders() {
