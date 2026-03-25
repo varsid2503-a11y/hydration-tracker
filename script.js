@@ -1,146 +1,101 @@
-let currentTotal = 0;
-let dailyGoal = 1225;
-let intakeLog = [];
-let isFocusMode = false;
-let reminderTimer = null;
-let weeklyData = JSON.parse(localStorage.getItem('weeklyData')) || [0, 0, 0, 0, 0, 0, 0];
-let myChart = null;
+const app = document.getElementById('app');
+let weight = localStorage.getItem('varsid_weight') || 60;
+let intake = JSON.parse(localStorage.getItem('varsid_intake')) || [0, 0, 0, 0, 0, 0, 0];
+let lastDate = localStorage.getItem('varsid_last_date');
 
-window.onload = () => {
-    loadData();
-    updateUI();
+const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const now = new Date();
+const todayDateString = now.toDateString();
+const todayIndex = now.getDay();
+
+if (lastDate !== todayDateString) {
+    localStorage.setItem('varsid_last_date', todayDateString);
+    localStorage.setItem('varsid_intake', JSON.stringify(intake));
+}
+
+function init() {
+    const goal = weight * 35;
+    const current = intake[todayIndex];
+    const percent = Math.min((current / goal) * 100, 100).toFixed(0);
+
+    app.innerHTML = `
+        <h1>HydratePro</h1>
+        <p style="opacity:0.7">${todayDateString}</p>
+        <div class="stats-grid">
+            <div class="stat-card"><h3>Goal</h3><p>${goal}ml</p></div>
+            <div class="stat-card"><h3>Logged</h3><p>${current}ml</p></div>
+        </div>
+        <div style="font-size: 2.5rem; font-weight: bold; margin: 10px 0;">${percent}%</div>
+        <input type="number" id="waterInput" placeholder="Add water (ml)">
+        <button onclick="addWater()">Add Drink</button>
+        <button onclick="toggleHistory()" style="background:rgba(255,255,255,0.1); margin-top:15px; font-size:0.8rem;">View Weekly History</button>
+        <div id="historyLog" style="display:none; margin-top:15px; text-align:left; background:rgba(0,0,0,0.2); padding:15px; border-radius:10px;">
+            ${intake.map((amt, i) => `<div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.1); padding:5px 0;">
+                <span>${days[i]}</span><span>${amt}ml</span>
+            </div>`).join('')}
+        </div>
+        <input type="number" id="weightInput" placeholder="Update weight (kg)" style="margin-top:25px;">
+        <button onclick="updateWeight()" style="background:none; border:1px solid var(--border); color:var(--text); font-size:0.8rem;">Update Profile</button>
+        <canvas id="chart"></canvas>
+    `;
     renderChart();
-    startReminders();
-};
+}
 
-function loadData() {
-    const savedTotal = localStorage.getItem('currentTotal');
-    const savedLog = localStorage.getItem('intakeLog');
-    const savedWeight = localStorage.getItem('userWeight');
-    const savedInterval = localStorage.getItem('reminderInterval');
-
-    if (savedTotal) currentTotal = parseInt(savedTotal);
-    if (savedLog) intakeLog = JSON.parse(savedLog);
-    if (savedWeight) {
-        document.getElementById('user-weight').value = savedWeight;
-        dailyGoal = savedWeight * 35;
-    }
-    if (savedInterval) {
-        document.getElementById('reminder-interval').value = savedInterval;
+function addWater() {
+    const input = document.getElementById('waterInput');
+    const val = parseInt(input.value);
+    if (val) {
+        const goal = weight * 35;
+        const before = intake[todayIndex];
+        intake[todayIndex] += val;
+        if (before < goal && intake[todayIndex] >= goal) {
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        }
+        localStorage.setItem('varsid_intake', JSON.stringify(intake));
+        init();
     }
 }
 
-function updateGoal() {
-    const weight = document.getElementById('user-weight').value;
-    dailyGoal = weight * 35;
-    localStorage.setItem('userWeight', weight);
-    updateUI();
+function toggleHistory() {
+    const log = document.getElementById('historyLog');
+    log.style.display = log.style.display === 'none' ? 'block' : 'none';
 }
 
-function addWater(amount) {
-    currentTotal += amount;
-    intakeLog.push({ 
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), 
-        amount: amount 
-    });
-    
-    updateWeeklyData();
-    saveData();
-    updateUI();
-    checkGoal();
-}
-
-function updateWeeklyData() {
-    const today = new Date().getDay();
-    weeklyData[today] = currentTotal;
-    localStorage.setItem('weeklyData', JSON.stringify(weeklyData));
-    if (myChart) {
-        myChart.data.datasets[0].data = weeklyData;
-        myChart.update();
+function updateWeight() {
+    const val = document.getElementById('weightInput').value;
+    if (val) {
+        weight = val;
+        localStorage.setItem('varsid_weight', weight);
+        init();
     }
 }
 
 function renderChart() {
-    const ctx = document.getElementById('weeklyChart').getContext('2d');
-    myChart = new Chart(ctx, {
+    const ctx = document.getElementById('chart').getContext('2d');
+    new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            labels: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
             datasets: [{
-                label: 'ml Drank',
-                data: weeklyData,
-                backgroundColor: '#48cae4',
-                borderRadius: 5,
-                borderWidth: 0
+                label: 'ml',
+                data: intake,
+                backgroundColor: intake.map((_, i) => i === todayIndex ? '#00b4d8' : 'rgba(202, 240, 248, 0.3)'),
+                borderRadius: 8
             }]
         },
         options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#90e0ef', font: { size: 10 } } },
-                x: { grid: { display: false }, ticks: { color: '#90e0ef', font: { size: 10 } } }
-            },
-            plugins: { legend: { display: false } }
+            plugins: { legend: { display: false } },
+            scales: { y: { display: false }, x: { grid: { display: false }, ticks: { color: '#caf0f8' } } }
         }
     });
 }
 
-function updateUI() {
-    const percentage = Math.min(Math.floor((currentTotal / dailyGoal) * 100), 100);
-    document.getElementById('percentage-text').innerText = percentage + "%";
-    document.querySelector('.progress-circle').style.background = `radial-gradient(closest-side, white 79%, transparent 80% 100%), conic-gradient(#00b4d8 ${percentage}%, #caf0f8 0%)`;
-    document.getElementById('total-display').innerText = currentTotal + "ml";
-    document.querySelector('.goal-text').innerText = `Goal: ${dailyGoal}ml`;
+init();
 
-    const list = document.getElementById('history-list');
-    list.innerHTML = intakeLog.slice(-3).reverse().map(item => `<li>Drank ${item.amount}ml at ${item.time}</li>`).join('');
-}
-
-function startReminders() {
-    const mins = document.getElementById('reminder-interval').value || 15;
-    if (reminderTimer) clearInterval(reminderTimer);
-    reminderTimer = setInterval(showHydrationNotification, mins * 60 * 1000);
-}
-
-function updateReminders() {
-    const mins = document.getElementById('reminder-interval').value;
-    localStorage.setItem('reminderInterval', mins);
-    startReminders();
-}
-
-function showHydrationNotification() {
-    if (Notification.permission === "granted" && currentTotal < dailyGoal && !isFocusMode) {
-        new Notification("Hydration Check!", { body: `Current: ${currentTotal}ml. Keep going!` });
-    }
-}
-
-function saveData() {
-    localStorage.setItem('currentTotal', currentTotal);
-    localStorage.setItem('intakeLog', JSON.stringify(intakeLog));
-}
-
-function resetApp() {
-    if (confirm("Reset today's progress?")) {
-        currentTotal = 0;
-        intakeLog = [];
-        updateWeeklyData();
-        saveData();
-        updateUI();
-    }
-}
-
-function checkGoal() {
-    if (currentTotal >= dailyGoal) {
-        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-        document.getElementById('victory-modal').classList.remove('hidden');
-    }
-}
-
-function closeVictory() {
-    document.getElementById('victory-modal').classList.add('hidden');
-}
-
-function toggleFocusMode() {
-    isFocusMode = document.getElementById('focus-toggle').checked;
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/hydration-tracker/sw.js')
+      .then(reg => console.log('SW Registered'))
+      .catch(err => console.log('SW Error', err));
+  });
 }

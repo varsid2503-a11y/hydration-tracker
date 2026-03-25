@@ -1,42 +1,37 @@
-# 💧 Hydration Tracker Pro
+# 💧 HydratePro Dashboard v2.0
+> **Smart Hydration Tracking for Students**
 
-A high-performance, interactive web application designed to help users reach their daily water goals with style and safety. This project features real-time progress tracking, gamified achievements, and a celebration system.
+HydratePro is a high-performance Progressive Web App (PWA) built to help users maintain optimal hydration levels. Developed by Varsid, this tool uses weight-based logic to calculate personal health goals and provides real-time data visualization.
 
-🌟 New "Pro" Features (Add these)
-PWA - Native App Experience: Install the tracker as a standalone app on Android, iOS, Windows, and Lenovo devices. It works without a browser address bar!
+## 🚀 Live Link
+Access the application directly in your browser:
+**[varsid2503-a11y.github.io/hydration-tracker/](https://varsid2503-a11y.github.io/hydration-tracker/)**
 
-Daily Streak System: A "persistence engine" that tracks how many days in a row you hit your goal. Missing a day resets the 🔥 icon.
+## ✨ Key Features
+* **Dynamic Goal Calculation:** Uses the formula $Weight \times 35$ to determine daily water requirements in ml.
+* **Weekly Analytics:** Interactive bar charts powered by Chart.js to track consumption trends over 7 days.
+* **PWA Integration:** Offline support via Service Workers and a mobile-ready manifest.json.
+* **Glassmorphism UI:** A modern, dark-themed interface with frosted glass effects.
+* **Goal Milestones:** Visual feedback and confetti celebrations upon reaching 100% daily intake.
 
-Deep-Sea Dark Mode: A custom-themed toggle that saves your preference (Light or Dark) even after the app is closed.
+## 🛠️ Tech Stack
+* **Frontend:** HTML5, CSS3 (Custom Properties & Backdrop-filter)
+* **Logic:** Vanilla JavaScript (ES6+)
+* **Data Visualization:** Chart.js
+* **Persistence:** LocalStorage API
+* **Deployment:** GitHub Pages
 
-Interactive Refresh Fact: A high-touch button that fetches random water trivia via an external API with a built-in loading spinner.
+## 📂 Project Structure
+* `index.html` - Application structure and SEO meta tags.
+* `style.css` - Professional styling and responsive layout.
+* `script.js` - Core application logic and chart rendering.
+* `sw.js` - Service worker for offline caching.
+* `manifest.json` - PWA configuration and app icons.
 
-Liquid Shimmer Animation: The progress bar now features a CSS-animated "wave" that makes the water level look like it's sloshing.
+## 📈 Search Optimization
+This project is optimized for Google search crawlers. To find this project on Google, search for:
+* `Varsid HydratePro`
+* `varsid2503-a11y hydration-tracker`
 
-🛠️ Tech Stack (Update this)
-PWA Architecture:
-
-manifest.json: For cross-platform installation and home screen icons.
-
-Service Workers (sw.js): Enables basic offline caching for a faster, app-like feel.
-
-JavaScript (ES6+):
-
-Notification API: Sends browser-level reminders every 30 minutes.
-
-Logic Gates: Advanced date-comparison logic to calculate daily streaks.
-
-## 🎖️ Achievement System
-
-- 🌱 **First Sip**: Log your first drink.
-- 🏆 **Hero**: Hit your 100% daily goal.
-- 🌊 **Max**: Reach the absolute 4000ml safety limit.
-
-## 🐛 Bug Fixes
-* **Persistence Issue (March 2026):** Fixed a bug where the custom Daily Goal would reset to 2000ml after a page refresh. Added `localStorage` support for the `goal-input` field so user settings are preserved.
-
-## See the Result
-If you wannt to run the web app, copy the below link paste it it in your *The Address Bar*(search bar -> located at the top of chrom browser):
-https://varsid2503-a11y.github.io/hydration-tracker/
-
-*Once you open the link, click the "Install" icon in your address bar (on Desktop) or select "Add to Home Screen" (on Mobile) to use it as a real app!*
+---
+© Built by Varsid in 2026 in the class of 5th grade.
