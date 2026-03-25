@@ -8,13 +8,14 @@
     <meta name="description" content="Professional hydration dashboard for students. Features weight-based goal calculation and weekly analytics.">
     <meta name="keywords" content="Varsid, HydratePro, water tracker, PWA, STEM project, JavaScript dashboard">
     <meta name="author" content="Varsid2503-a11y">
+    <meta name="theme-color" content="#071a52">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://varsid2503-a11y.github.io/hydration-tracker/">
     <meta property="og:title" content="HydratePro | Smart Water Tracker">
     <meta property="og:description" content="Track your daily water intake with my custom Pro Dashboard.">
-    <meta property="og:image" content="favicon.png">
-    <link rel="icon" type="image/png" sizes="48x48" href="favicon.png">
-    <link rel="apple-touch-icon" href="favicon.png">
+    <meta property="og:image" content="icon.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
     <link rel="manifest" href="manifest.json">
     <script type="application/ld+json">
     {
@@ -32,7 +33,10 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="app"></div>
+    <main class="app-shell">
+        <div id="app"></div>
+        <noscript>This app needs JavaScript to track your hydration data.</noscript>
+    </main>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script src="script.js"></script>

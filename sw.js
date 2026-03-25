@@ -1,11 +1,12 @@
 const cacheName = 'hydratepro-v2';
+const appBase = self.location.pathname.replace(/\/[^/]*$/, '/');
 const assets = [
-  '/hydration-tracker/',
-  '/hydration-tracker/index.html',
-  '/hydration-tracker/style.css',
-  '/hydration-tracker/script.js',
-  '/hydration-tracker/favicon.png',
-  '/hydration-tracker/manifest.json',
+  appBase,
+  `${appBase}index.html`,
+  `${appBase}style.css`,
+  `${appBase}script.js`,
+  `${appBase}icon.png`,
+  `${appBase}manifest.json`,
   'https://cdn.jsdelivr.net/npm/chart.js',
   'https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js'
 ];

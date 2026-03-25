@@ -1,101 +1,429 @@
-const app = document.getElementById('app');
-let weight = localStorage.getItem('varsid_weight') || 60;
-let intake = JSON.parse(localStorage.getItem('varsid_intake')) || [0, 0, 0, 0, 0, 0, 0];
-let lastDate = localStorage.getItem('varsid_last_date');
+const app = document.getElementById("app");
+const storageKey = "varsid_hydratepro_state_v2";
+const legacyWeightKey = "varsid_weight";
+const legacyIntakeKey = "varsid_intake";
+const dateFormatter = new Intl.DateTimeFormat(undefined, {
+    weekday: "long",
+    month: "short",
+    day: "numeric"
+});
+const shortFormatter = new Intl.DateTimeFormat(undefined, {
+    weekday: "short"
+});
 
-const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const now = new Date();
-const todayDateString = now.toDateString();
-const todayIndex = now.getDay();
+let chartInstance = null;
+let historyOpen = false;
 
-if (lastDate !== todayDateString) {
-    localStorage.setItem('varsid_last_date', todayDateString);
-    localStorage.setItem('varsid_intake', JSON.stringify(intake));
+function formatDateKey(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
 }
 
-function init() {
-    const goal = weight * 35;
-    const current = intake[todayIndex];
-    const percent = Math.min((current / goal) * 100, 100).toFixed(0);
+function getTodayKey() {
+    return formatDateKey(new Date());
+}
 
-    app.innerHTML = `
-        <h1>HydratePro</h1>
-        <p style="opacity:0.7">${todayDateString}</p>
-        <div class="stats-grid">
-            <div class="stat-card"><h3>Goal</h3><p>${goal}ml</p></div>
-            <div class="stat-card"><h3>Logged</h3><p>${current}ml</p></div>
-        </div>
-        <div style="font-size: 2.5rem; font-weight: bold; margin: 10px 0;">${percent}%</div>
-        <input type="number" id="waterInput" placeholder="Add water (ml)">
-        <button onclick="addWater()">Add Drink</button>
-        <button onclick="toggleHistory()" style="background:rgba(255,255,255,0.1); margin-top:15px; font-size:0.8rem;">View Weekly History</button>
-        <div id="historyLog" style="display:none; margin-top:15px; text-align:left; background:rgba(0,0,0,0.2); padding:15px; border-radius:10px;">
-            ${intake.map((amt, i) => `<div style="display:flex; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.1); padding:5px 0;">
-                <span>${days[i]}</span><span>${amt}ml</span>
-            </div>`).join('')}
-        </div>
-        <input type="number" id="weightInput" placeholder="Update weight (kg)" style="margin-top:25px;">
-        <button onclick="updateWeight()" style="background:none; border:1px solid var(--border); color:var(--text); font-size:0.8rem;">Update Profile</button>
-        <canvas id="chart"></canvas>
+function formatNumber(value) {
+    return new Intl.NumberFormat().format(Math.round(value));
+}
+
+function clampWeight(value) {
+    const parsed = Number(value);
+    if (!Number.isFinite(parsed)) {
+        return 60;
+    }
+
+    return Math.min(Math.max(parsed, 20), 250);
+}
+
+function buildLastSevenDays() {
+    const days = [];
+
+    for (let index = 6; index >= 0; index -= 1) {
+        const date = new Date();
+        date.setHours(0, 0, 0, 0);
+        date.setDate(date.getDate() - index);
+        days.push({
+            date: formatDateKey(date),
+            amount: 0
+        });
+    }
+
+    return days;
+}
+
+function migrateLegacyState() {
+    const legacyWeight = clampWeight(localStorage.getItem(legacyWeightKey) || 60);
+    const legacyIntake = JSON.parse(localStorage.getItem(legacyIntakeKey) || "[]");
+    const fallbackHistory = buildLastSevenDays();
+
+    if (Array.isArray(legacyIntake) && legacyIntake.length === 7) {
+        fallbackHistory.forEach((entry) => {
+            const weekdayIndex = new Date(entry.date).getDay();
+            const amount = Number(legacyIntake[weekdayIndex]);
+            entry.amount = Number.isFinite(amount) && amount > 0 ? amount : 0;
+        });
+    }
+
+    return {
+        weight: legacyWeight,
+        history: fallbackHistory
+    };
+}
+
+function normalizeHistory(history) {
+    const lastSevenDays = buildLastSevenDays();
+    const historyMap = new Map(
+        (Array.isArray(history) ? history : []).map((entry) => [entry.date, Number(entry.amount) || 0])
+    );
+
+    return lastSevenDays.map((entry) => ({
+        date: entry.date,
+        amount: Math.max(0, historyMap.get(entry.date) || 0)
+    }));
+}
+
+function loadState() {
+    const saved = localStorage.getItem(storageKey);
+
+    if (!saved) {
+        return migrateLegacyState();
+    }
+
+    try {
+        const parsed = JSON.parse(saved);
+        return {
+            weight: clampWeight(parsed.weight),
+            history: normalizeHistory(parsed.history)
+        };
+    } catch (error) {
+        return migrateLegacyState();
+    }
+}
+
+let state = loadState();
+
+function saveState() {
+    state.history = normalizeHistory(state.history);
+    localStorage.setItem(storageKey, JSON.stringify(state));
+}
+
+function getTodayEntry() {
+    const todayKey = getTodayKey();
+    let todayEntry = state.history.find((entry) => entry.date === todayKey);
+
+    if (!todayEntry) {
+        state.history = normalizeHistory(state.history);
+        todayEntry = state.history.find((entry) => entry.date === todayKey);
+        saveState();
+    }
+
+    return todayEntry;
+}
+
+function getDailyGoal() {
+    return Math.round(state.weight * 35);
+}
+
+function getCompletionPercent() {
+    const goal = getDailyGoal();
+    const current = getTodayEntry().amount;
+
+    if (!goal) {
+        return 0;
+    }
+
+    return Math.min(Math.round((current / goal) * 100), 100);
+}
+
+function getRemainingAmount() {
+    return Math.max(getDailyGoal() - getTodayEntry().amount, 0);
+}
+
+function getAverageIntake() {
+    const total = state.history.reduce((sum, entry) => sum + entry.amount, 0);
+    return Math.round(total / state.history.length);
+}
+
+function buildHistoryMarkup() {
+    return [...state.history]
+        .reverse()
+        .map((entry) => {
+            const date = new Date(`${entry.date}T00:00:00`);
+            const isToday = entry.date === getTodayKey();
+            const dayLabel = dateFormatter.format(date);
+            const subLabel = isToday ? "Today" : shortFormatter.format(date);
+
+            return `
+                <div class="history-item">
+                    <div>
+                        <strong>${dayLabel}</strong>
+                        <small>${subLabel}</small>
+                    </div>
+                    <strong>${formatNumber(entry.amount)} ml</strong>
+                </div>
+            `;
+        })
+        .join("");
+}
+
+function buildAppMarkup() {
+    const todayEntry = getTodayEntry();
+    const goal = getDailyGoal();
+    const percent = getCompletionPercent();
+    const remaining = getRemainingAmount();
+    const message = percent >= 100
+        ? "Goal reached. Nice work staying hydrated."
+        : `${formatNumber(remaining)} ml left to reach your goal today.`;
+
+    return `
+        <section class="dashboard" aria-label="HydratePro dashboard">
+            <div class="hero">
+                <div>
+                    <span class="eyebrow">Hydration Dashboard</span>
+                    <h1>HydratePro</h1>
+                    <p>${dateFormatter.format(new Date())}</p>
+                </div>
+                <div class="goal-pill">
+                    <span>Daily Goal</span>
+                    <strong>${formatNumber(goal)} ml</strong>
+                </div>
+            </div>
+
+            <section class="progress-card" aria-label="Daily hydration progress">
+                <div class="progress-meta">
+                    <div>
+                        <p>Today's intake</p>
+                        <strong>${percent}%</strong>
+                    </div>
+                    <div class="progress-copy">
+                        <p>${formatNumber(todayEntry.amount)} ml logged</p>
+                        <p class="status-line">${message}</p>
+                    </div>
+                </div>
+                <div class="progress-track" aria-hidden="true">
+                    <div class="progress-fill" style="width: ${percent}%"></div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span>Current</span>
+                        <strong>${formatNumber(todayEntry.amount)} ml</strong>
+                    </div>
+                    <div class="stat-card">
+                        <span>Remaining</span>
+                        <strong>${formatNumber(remaining)} ml</strong>
+                    </div>
+                    <div class="stat-card">
+                        <span>7-Day Avg</span>
+                        <strong>${formatNumber(getAverageIntake())} ml</strong>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel" aria-label="Log water intake">
+                <div class="panel-header">
+                    <div>
+                        <h2>Log a drink</h2>
+                        <p>Add the amount you just drank in milliliters.</p>
+                    </div>
+                </div>
+                <form id="intakeForm" novalidate>
+                    <label class="sr-only" for="waterInput">Water intake in milliliters</label>
+                    <div class="form-row">
+                        <input id="waterInput" name="water" type="number" inputmode="numeric" min="1" step="10" placeholder="Add water (ml)" required>
+                        <button class="button-primary" type="submit">Add Drink</button>
+                    </div>
+                </form>
+                <p class="message">Hydration goal uses the README formula: weight x 35 ml.</p>
+            </section>
+
+            <section class="panel" aria-label="Weekly analytics">
+                <div class="panel-header">
+                    <div>
+                        <h2>Weekly analytics</h2>
+                        <p>Track the last 7 days of water intake.</p>
+                    </div>
+                    <button id="historyToggle" class="button-secondary ${historyOpen ? "is-open" : ""}" type="button" aria-expanded="${historyOpen}">
+                        ${historyOpen ? "Hide History" : "View History"}
+                    </button>
+                </div>
+                <div class="chart-wrap">
+                    <canvas id="chart" aria-label="Bar chart of hydration history"></canvas>
+                </div>
+                <div id="historyLog" class="history-list" ${historyOpen ? "" : "hidden"}>
+                    ${buildHistoryMarkup()}
+                </div>
+            </section>
+
+            <section class="panel" aria-label="Profile settings">
+                <div class="panel-header">
+                    <div>
+                        <h2>Profile</h2>
+                        <p>Update your weight to recalculate your hydration target.</p>
+                    </div>
+                </div>
+                <form id="profileForm" novalidate>
+                    <label class="sr-only" for="weightInput">Body weight in kilograms</label>
+                    <div class="profile-row">
+                        <input id="weightInput" name="weight" type="number" inputmode="decimal" min="20" max="250" step="0.1" value="${state.weight}">
+                        <button class="button-secondary" type="submit">Update Profile</button>
+                    </div>
+                </form>
+            </section>
+        </section>
     `;
-    renderChart();
 }
 
-function addWater() {
-    const input = document.getElementById('waterInput');
-    const val = parseInt(input.value);
-    if (val) {
-        const goal = weight * 35;
-        const before = intake[todayIndex];
-        intake[todayIndex] += val;
-        if (before < goal && intake[todayIndex] >= goal) {
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-        }
-        localStorage.setItem('varsid_intake', JSON.stringify(intake));
-        init();
-    }
-}
+function attachEventListeners() {
+    const intakeForm = document.getElementById("intakeForm");
+    const profileForm = document.getElementById("profileForm");
+    const historyToggle = document.getElementById("historyToggle");
 
-function toggleHistory() {
-    const log = document.getElementById('historyLog');
-    log.style.display = log.style.display === 'none' ? 'block' : 'none';
-}
-
-function updateWeight() {
-    const val = document.getElementById('weightInput').value;
-    if (val) {
-        weight = val;
-        localStorage.setItem('varsid_weight', weight);
-        init();
-    }
+    intakeForm.addEventListener("submit", handleAddWater);
+    profileForm.addEventListener("submit", handleUpdateWeight);
+    historyToggle.addEventListener("click", toggleHistory);
 }
 
 function renderChart() {
-    const ctx = document.getElementById('chart').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
+    const ctx = document.getElementById("chart");
+
+    if (!ctx) {
+        return;
+    }
+
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
+
+    const labels = state.history.map((entry) => shortFormatter.format(new Date(`${entry.date}T00:00:00`)));
+    const todayKey = getTodayKey();
+
+    chartInstance = new Chart(ctx, {
+        type: "bar",
         data: {
-            labels: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+            labels,
             datasets: [{
-                label: 'ml',
-                data: intake,
-                backgroundColor: intake.map((_, i) => i === todayIndex ? '#00b4d8' : 'rgba(202, 240, 248, 0.3)'),
-                borderRadius: 8
+                label: "Water intake (ml)",
+                data: state.history.map((entry) => entry.amount),
+                backgroundColor: state.history.map((entry) =>
+                    entry.date === todayKey ? "#4cc9f0" : "rgba(202, 240, 248, 0.28)"
+                ),
+                hoverBackgroundColor: state.history.map((entry) =>
+                    entry.date === todayKey ? "#7ddfff" : "rgba(202, 240, 248, 0.38)"
+                ),
+                borderRadius: 10,
+                borderSkipped: false
             }]
         },
         options: {
-            plugins: { legend: { display: false } },
-            scales: { y: { display: false }, x: { grid: { display: false }, ticks: { color: '#caf0f8' } } }
+            maintainAspectRatio: false,
+            animation: {
+                duration: 500
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label(context) {
+                            return `${formatNumber(context.parsed.y)} ml`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: "#d4f4ff"
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: "#8eb8cb",
+                        callback(value) {
+                            return `${value} ml`;
+                        }
+                    },
+                    grid: {
+                        color: "rgba(255, 255, 255, 0.08)"
+                    }
+                }
+            }
         }
     });
 }
 
-init();
+function renderApp() {
+    saveState();
+    app.innerHTML = buildAppMarkup();
+    attachEventListeners();
+    renderChart();
+}
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/hydration-tracker/sw.js')
-      .then(reg => console.log('SW Registered'))
-      .catch(err => console.log('SW Error', err));
-  });
+function celebrateGoalReached(previousAmount, currentAmount) {
+    const goal = getDailyGoal();
+
+    if (previousAmount < goal && currentAmount >= goal && typeof confetti === "function") {
+        confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 }
+        });
+    }
+}
+
+function handleAddWater(event) {
+    event.preventDefault();
+
+    const waterInput = document.getElementById("waterInput");
+    const amount = Number.parseInt(waterInput.value, 10);
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+        waterInput.focus();
+        return;
+    }
+
+    const todayEntry = getTodayEntry();
+    const previousAmount = todayEntry.amount;
+    todayEntry.amount += amount;
+    celebrateGoalReached(previousAmount, todayEntry.amount);
+    renderApp();
+}
+
+function handleUpdateWeight(event) {
+    event.preventDefault();
+
+    const weightInput = document.getElementById("weightInput");
+    const nextWeight = Number.parseFloat(weightInput.value);
+
+    if (!Number.isFinite(nextWeight) || nextWeight < 20 || nextWeight > 250) {
+        weightInput.focus();
+        return;
+    }
+
+    state.weight = clampWeight(nextWeight);
+    renderApp();
+}
+
+function toggleHistory() {
+    historyOpen = !historyOpen;
+    renderApp();
+}
+
+renderApp();
+
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker
+            .register("sw.js")
+            .then(() => console.log("SW Registered"))
+            .catch((error) => console.log("SW Error", error));
+    });
 }
