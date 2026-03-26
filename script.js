@@ -1,178 +1,79 @@
 const app = document.getElementById('app');
-let intake = JSON.parse(localStorage.getItem('varsid_intake')) || [0, 0, 0, 0, 0, 0, 0];
-let manualGoal = parseInt(localStorage.getItem('varsid_manual_goal')) || 0;
+let weight = localStorage.getItem('varsid_weight') || 0;
+let intake = JSON.parse(localStorage.getItem('varsid_intake')) || [0,0,0,0,0,0,0];
 let activityBonus = parseInt(localStorage.getItem('varsid_bonus')) || 0;
-let lastDate = localStorage.getItem('varsid_last_date');
-
-const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const now = new Date();
-const todayDateString = now.toDateString();
-const todayIndex = now.getDay();
-
-if (lastDate !== todayDateString) {
-    localStorage.setItem('varsid_last_date', todayDateString);
-    activityBonus = 0;
-    localStorage.setItem('varsid_bonus', 0);
-    localStorage.setItem('varsid_intake', JSON.stringify(intake));
-}
 
 function init() {
-    if (manualGoal === 0) {
-        renderSetup();
+    if (weight == 0) {
+        app.innerHTML = `
+            <h2>Setup Goal</h2>
+            <p>Enter your weight to calculate your 35ml goal:</p>
+            <input type="number" id="wInput" placeholder="Weight in kg">
+            <button class="main-btn" onclick="saveW()">Calculate & Start</button>`;
         return;
     }
 
-    const totalGoal = manualGoal + activityBonus;
-    const current = intake[todayIndex];
-    const percent = Math.min((current / totalGoal) * 100, 100).toFixed(0);
-    const isGoalReached = current >= totalGoal;
+    const goal = (weight * 35) + activityBonus;
+    const current = intake[new Date().getDay()];
+    const percent = Math.min((current/goal)*100, 100).toFixed(0);
 
     app.innerHTML = `
         <h1>HydratePro</h1>
-        <p style="opacity:0.7">${todayDateString}</p>
+        <div class="fact-box"><strong>💡 Fact:</strong> Drinking water helps your brain focus during Math and Science!</div>
         
-        <div style="margin-bottom:20px;">
-            <select id="activityLevel" onchange="updateActivity()" style="width:100%; padding:10px; border-radius:8px; background:#1a1a1a; color:white; border:1px solid #333;">
-                <option value="0" ${activityBonus === 0 ? 'selected' : ''}>Rest Day</option>
-                <option value="500" ${activityBonus === 500 ? 'selected' : ''}>Active (+500ml)</option>
-                <option value="1000" ${activityBonus === 1000 ? 'selected' : ''}>Athlete (+1000ml)</option>
-            </select>
-        </div>
+        <select onchange="setAct(this.value)" style="width:100%; padding:8px; margin-bottom:15px; border-radius:8px;">
+            <option value="0" ${activityBonus==0?'selected':''}>Rest Day</option>
+            <option value="500" ${activityBonus==500?'selected':''}>Active (+500ml)</option>
+            <option value="1000" ${activityBonus==1000?'selected':''}>Match Day (+1000ml)</option>
+        </select>
 
         <div class="stats-grid">
-            <div class="stat-card"><h3>Target</h3><p>${totalGoal}ml</p></div>
-            <div class="stat-card"><h3>Logged</h3><p>${current}ml</p></div>
+            <div class="stat-card"><small>Goal</small><div>${goal}ml</div></div>
+            <div class="stat-card"><small>Logged</small><div>${current}ml</div></div>
         </div>
 
-        <div style="font-size: 2.5rem; font-weight: bold; margin: 10px 0;">${percent}%</div>
-        
-        <input type="number" id="waterInput" placeholder="ml to add" ${isGoalReached ? 'disabled' : ''}>
-        
-        <button id="addBtn" onclick="addWater()" 
-            style="${isGoalReached ? 'background:#555; opacity:0.6;' : ''}" 
-            ${isGoalReached ? 'disabled' : ''}>
-            ${isGoalReached ? 'Goal Met!' : 'Add Water'}
-        </button>
-
-        <div id="successModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:100; align-items:center; justify-content:center;">
-            <div style="background:#1a1a1a; padding:40px; border-radius:20px; border:2px solid #00b4d8; text-align:center; box-shadow: 0 0 20px rgba(0,180,216,0.5); width:80%; max-width:400px;">
-                <div style="font-size:4rem; margin-bottom:10px;">🏆</div>
-                <h2>Goal Smashed!</h2>
-                <p>You hit 100% of your ${totalGoal}ml goal today!</p>
-                
-                <button onclick="shareSuccess()" style="width:100%; background:#25D366; color:white; margin-bottom:10px; display:flex; align-items:center; justify-content:center; gap:10px;">
-                    <span>📤</span> Share Success
-                </button>
-                
-                <button onclick="closeModal()" style="width:100%; background:none; border:1px solid #444; color:white;">Close</button>
-            </div>
-        </div>
-
-        <button onclick="resetGoal()" style="background:none; border:1px solid #444; color:gray; font-size:0.7rem; margin-top:20px;">Recalculate Base Goal</button>
+        <div style="font-size:2.5rem; font-weight:bold;">${percent}%</div>
+        <input type="number" id="mlAdd" placeholder="ml to add">
+        <button class="main-btn" onclick="addW()">Add Water</button>
+        <button onclick="reset()" style="background:none; border:none; color:gray; font-size:0.7rem; margin-top:15px; cursor:pointer;">Reset Weight</button>
         <canvas id="chart"></canvas>
-    `;
+
+        <div id="successModal" onclick="this.style.display='none'">
+            <div style="background:var(--card); padding:30px; border-radius:20px; border:2px solid var(--primary); text-align:center;">
+                <div style="font-size:3rem;">🏆</div><h2>Goal Reached!</h2><p>Tap to close</p>
+            </div>
+        </div>`;
     renderChart();
 }
 
-function renderSetup() {
-    app.innerHTML = `
-        <div style="text-align:left; padding:20px;">
-            <h2>Set Your Goal</h2>
-            <p style="background:rgba(0,180,216,0.1); padding:15px; border-radius:10px; border-left:4px solid #00b4d8;">
-                <strong>The Formula:</strong><br>
-                Weight (kg) × 35 = Daily ml
-            </p>
-            <p>Calculate your needs and enter the total below:</p>
-            <input type="number" id="newManualGoal" placeholder="e.g. 2100" style="width:100%; margin-bottom:15px;">
-            <button onclick="setManualGoal()" style="width:100%;">Save My Goal</button>
-        </div>
-    `;
+function saveW() {
+    const val = document.getElementById('wInput').value;
+    if(val > 0) { weight = val; localStorage.setItem('varsid_weight', val); init(); }
 }
 
-function setManualGoal() {
-    const val = parseInt(document.getElementById('newManualGoal').value);
-    if (val && val > 500) {
-        manualGoal = val;
-        localStorage.setItem('varsid_manual_goal', manualGoal);
-        init();
-    } else {
-        alert("Enter a valid goal.");
+function addW() {
+    const val = parseInt(document.getElementById('mlAdd').value);
+    const day = new Date().getDay();
+    const goal = (weight * 35) + activityBonus;
+    if(!val) return;
+    intake[day] += val;
+    if(intake[day] >= goal) { 
+        document.getElementById('successModal').style.display='flex'; 
+        confetti();
     }
-}
-
-function resetGoal() {
-    manualGoal = 0;
-    localStorage.removeItem('varsid_manual_goal');
-    init();
-}
-
-function updateActivity() {
-    activityBonus = parseInt(document.getElementById('activityLevel').value);
-    localStorage.setItem('varsid_bonus', activityBonus);
-    init();
-}
-
-function addWater() {
-    const input = document.getElementById('waterInput');
-    const val = parseInt(input.value);
-    const totalGoal = manualGoal + activityBonus;
-
-    if (!val) return;
-
-    if (intake[todayIndex] + val > totalGoal) {
-        alert("Remaining: " + (totalGoal - intake[todayIndex]) + "ml");
-        input.value = '';
-        return;
-    }
-
-    intake[todayIndex] += val;
-    
-    if (intake[todayIndex] === totalGoal) {
-        document.getElementById('successModal').style.display = 'flex';
-        confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
-    }
-
     localStorage.setItem('varsid_intake', JSON.stringify(intake));
     init();
 }
 
-function shareSuccess() {
-    const totalGoal = manualGoal + activityBonus;
-    const shareData = {
-        title: 'HydratePro Goal Reached!',
-        text: `I just hit my 100% hydration goal of ${totalGoal}ml on HydratePro! 🏆 Stay hydrated with me!`,
-        url: window.location.href
-    };
-
-    if (navigator.share) {
-        navigator.share(shareData).catch((err) => console.log('Error sharing', err));
-    } else {
-        alert("Sharing is not supported on this browser. Copy the link manually!");
-    }
-}
-
-function closeModal() {
-    document.getElementById('successModal').style.display = 'none';
-}
+function setAct(v) { activityBonus = parseInt(v); localStorage.setItem('varsid_bonus', v); init(); }
+function reset() { localStorage.clear(); location.reload(); }
 
 function renderChart() {
     const ctx = document.getElementById('chart').getContext('2d');
-    if(window.myChart) window.myChart.destroy();
-    window.myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
-            datasets: [{
-                label: 'ml',
-                data: intake,
-                backgroundColor: intake.map((_, i) => i === todayIndex ? '#00b4d8' : 'rgba(202, 240, 248, 0.3)'),
-                borderRadius: 8
-            }]
-        },
-        options: {
-            plugins: { legend: { display: false } },
-            scales: { y: { display: false }, x: { grid: { display: false }, ticks: { color: '#caf0f8' } } }
-        }
+    new Chart(ctx, {
+        type: 'bar', data: { labels: ['S','M','T','W','T','F','S'],
+        datasets: [{ data: intake, backgroundColor: '#00b4d8', borderRadius: 5 }]},
+        options: { plugins: { legend: { display: false }}, scales: { y: { display: false }}}
     });
 }
 

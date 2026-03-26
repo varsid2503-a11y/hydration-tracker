@@ -1,137 +1,54 @@
 :root {
-    --bg: #0b0d11;
-    --card: #161b22;
     --primary: #00b4d8;
-    --text: #f0f6fc;
-    --border: #30363d;
-    --success: #25D366;
+    --transition: 0.3s;
 }
 
-* {
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+.dark-mode {
+    --bg: #0b0d11; --card: #161b22; --text: #f0f6fc; --border: #30363d; --input: #000;
+}
+
+.light-mode {
+    --bg: #f0f2f5; --card: #ffffff; --text: #1c1e21; --border: #dddfe2; --input: #f5f6f7;
 }
 
 body {
-    background-color: var(--bg);
-    color: var(--text);
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
+    background: var(--bg); color: var(--text); font-family: sans-serif;
+    display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px;
+    transition: background var(--transition);
+}
+
+.top-controls { width: 100%; max-width: 400px; text-align: right; margin-bottom: 10px; }
+
+#themeBtn {
+    background: none; border: 1px solid var(--border); color: var(--text);
+    padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; cursor: pointer;
 }
 
 #app {
-    width: 100%;
-    max-width: 400px;
-    background: var(--card);
-    padding: 30px;
-    border-radius: 24px;
-    border: 1px solid var(--border);
-    text-align: center;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    width: 100%; max-width: 400px; background: var(--card); padding: 25px;
+    border-radius: 20px; border: 1px solid var(--border); text-align: center;
 }
 
-h1 {
-    margin: 0;
-    font-size: 1.8rem;
-    color: var(--primary);
-    letter-spacing: -1px;
+.fact-box {
+    background: rgba(0, 180, 216, 0.1); border: 1px solid var(--primary);
+    color: var(--primary); padding: 12px; border-radius: 12px; margin: 15px 0;
+    font-size: 0.85rem; text-align: left;
 }
 
-.stats-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin: 20px 0;
-}
-
-.stat-card {
-    background: rgba(255,255,255,0.03);
-    padding: 15px;
-    border-radius: 16px;
-    border: 1px solid var(--border);
-}
-
-.stat-card h3 {
-    margin: 0;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    color: #8b949e;
-}
-
-.stat-card p {
-    margin: 5px 0 0;
-    font-size: 1.2rem;
-    font-weight: bold;
-}
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+.stat-card { background: var(--input); padding: 10px; border-radius: 12px; border: 1px solid var(--border); }
 
 input {
-    width: 100%;
-    background: #0d1117;
-    border: 1px solid var(--border);
-    color: white;
-    padding: 15px;
-    border-radius: 12px;
-    font-size: 1rem;
-    margin-bottom: 15px;
-    transition: border-color 0.3s;
+    width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px;
+    background: var(--input); border: 1px solid var(--border); color: var(--text);
 }
 
-input:focus {
-    outline: none;
-    border-color: var(--primary);
+button.main-btn {
+    width: 100%; padding: 12px; background: var(--primary); color: white;
+    border: none; border-radius: 10px; font-weight: bold; cursor: pointer;
 }
 
-button {
-    width: 100%;
-    background: var(--primary);
-    color: white;
-    border: none;
-    padding: 15px;
-    border-radius: 12px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.1s, filter 0.2s;
-}
-
-button:active {
-    transform: scale(0.98);
-}
-
-button:disabled {
-    filter: grayscale(1);
-    cursor: not-allowed;
-}
-
-select {
-    appearance: none;
-    cursor: pointer;
-}
-
-canvas {
-    margin-top: 25px;
-    max-height: 150px;
-}
-
-/* Modal Animation */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-#successModal > div {
-    animation: fadeIn 0.4s ease-out;
-}
-
-/* Scrollbar Styling */
-::-webkit-scrollbar {
-    width: 8px;
-}
-::-webkit-scrollbar-thumb {
-    background: var(--border);
-    border-radius: 10px;
+#successModal {
+    display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+    background:rgba(0,0,0,0.8); z-index:100; align-items:center; justify-content:center;
 }

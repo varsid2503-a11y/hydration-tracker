@@ -3,18 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HydratePro | Smart Hydration</title>
+    <title>HydratePro | Varsid</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
-<body>
+<body class="dark-mode" id="bodyTag">
+
+    <div class="top-controls">
+        <button onclick="toggleTheme()" id="themeBtn">☀️ Light Mode</button>
+    </div>
 
     <div id="app">
-        <div style="padding: 50px; opacity: 0.5;">Loading HydratePro...</div>
+        <div style="padding: 50px; opacity: 0.5;">Loading...</div>
     </div>
 
     <script src="script.js"></script>
+    <script>
+        function toggleTheme() {
+            const body = document.getElementById('bodyTag');
+            const btn = document.getElementById('themeBtn');
+            if (body.classList.contains('dark-mode')) {
+                body.classList.replace('dark-mode', 'light-mode');
+                btn.innerText = "🌙 Dark Mode";
+                localStorage.setItem('varsid_theme', 'light');
+            } else {
+                body.classList.replace('light-mode', 'dark-mode');
+                btn.innerText = "☀️ Light Mode";
+                localStorage.setItem('varsid_theme', 'dark');
+            }
+        }
+        if(localStorage.getItem('varsid_theme') === 'light') toggleTheme();
+    </script>
 </body>
 </html>
