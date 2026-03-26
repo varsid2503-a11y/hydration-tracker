@@ -2,7 +2,7 @@
   "name": "HydratePro",
   "short_name": "HydratePro",
   "description": "Smart Hydration Tracker by Varsid",
-  "start_url": "index.html",
+  "start_url": "/HydratePro/index.html",
   "display": "standalone",
   "background_color": "#0b0d11",
   "theme_color": "#00b4d8",
