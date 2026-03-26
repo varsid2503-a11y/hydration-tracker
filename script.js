@@ -55,11 +55,17 @@ function addWater() {
     const input = document.getElementById('waterInput');
     const val = parseInt(input.value);
     const goal = weight * 35;
+    const currentIntake = intake[todayIndex];
 
-    if (val && intake[todayIndex] < goal) {
-        intake[todayIndex] += val;
+    if (val && currentIntake < goal) {
+        // Option: Cap the value so it never exceeds the goal
+        if (currentIntake + val > goal) {
+            intake[todayIndex] = goal; // Force it to be exactly the goal
+        } else {
+            intake[todayIndex] += val;
+        }
         
-        if (intake[todayIndex] >= goal) {
+        if (intake[todayIndex] === goal) {
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         }
 
