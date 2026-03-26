@@ -1,16 +1,16 @@
 {
-  "name": "HydratePro Dashboard",
+  "name": "HydratePro",
   "short_name": "HydratePro",
-  "start_url": "/hydration-tracker/",
+  "description": "Smart Hydration Tracker for Athletes",
+  "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#03045e",
-  "theme_color": "#023e8a",
+  "background_color": "#0b0d11",
+  "theme_color": "#00b4d8",
   "icons": [
     {
-      "src": "icon.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/3105/3105807.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
   ]
 }
