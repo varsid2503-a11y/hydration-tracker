@@ -2,41 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="robots" content="index, follow">
-    <title>HydratePro | Varsid</title>
-    <a href="../index.html" style="color: gray; text-decoration: none; font-size: 0.8rem;">← Back to Hub</a>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HydratePro | Ultra</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
-<body class="dark-mode" id="bodyTag">
+<body>
+    <div class="background-glow"></div>
+    <div class="app-container">
+        <header>
+            <h1>Hydrate<span>Pro</span></h1>
+            <p id="date-display"></p>
+        </header>
 
-    <div class="top-controls">
-        <button onclick="toggleTheme()" id="themeBtn">☀️ Light Mode</button>
+        <div class="main-display">
+            <div class="circle-progress">
+                <svg>
+                    <circle cx="100" cy="100" r="90"></circle>
+                    <circle id="progress-bar" cx="100" cy="100" r="90"></circle>
+                </svg>
+                <div class="percentage">
+                    <span id="percent-num">0</span>%
+                    <p><span id="current-ml">0</span> / 3500ml</p>
+                </div>
+                <div class="water-wave" id="wave"></div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <small>REMAINING</small>
+                <h3 id="remain-ml">3500ml</h3>
+            </div>
+            <div class="stat-card">
+                <small>STATUS</small>
+                <h3 id="status-text">Dehydrated</h3>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="add-btn" onclick="addWater(250)">+ 250ml</button>
+            <button class="add-btn" onclick="addWater(500)">+ 500ml</button>
+            <button class="reset-btn" onclick="resetWater()">Reset</button>
+        </div>
     </div>
-
-    <div id="app">
-        <div style="padding: 50px; opacity: 0.5;">Loading...</div>
-    </div>
-
     <script src="script.js"></script>
-    <script>
-        function toggleTheme() {
-            const body = document.getElementById('bodyTag');
-            const btn = document.getElementById('themeBtn');
-            if (body.classList.contains('dark-mode')) {
-                body.classList.replace('dark-mode', 'light-mode');
-                btn.innerText = "🌙 Dark Mode";
-                localStorage.setItem('varsid_theme', 'light');
-            } else {
-                body.classList.replace('light-mode', 'dark-mode');
-                btn.innerText = "☀️ Light Mode";
-                localStorage.setItem('varsid_theme', 'dark');
-            }
-        }
-        if(localStorage.getItem('varsid_theme') === 'light') toggleTheme();
-    </script>
 </body>
 </html>

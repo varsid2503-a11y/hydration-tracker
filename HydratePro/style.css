@@ -1,54 +1,131 @@
 :root {
-    --primary: #00b4d8;
-    --transition: 0.3s;
-}
-
-.dark-mode {
-    --bg: #0b0d11; --card: #161b22; --text: #f0f6fc; --border: #30363d; --input: #000;
-}
-
-.light-mode {
-    --bg: #f0f2f5; --card: #ffffff; --text: #1c1e21; --border: #dddfe2; --input: #f5f6f7;
+    --primary: #00d4ff;
+    --bg: #05070a;
+    --glass: rgba(255, 255, 255, 0.05);
+    --text: #ffffff;
 }
 
 body {
-    background: var(--bg); color: var(--text); font-family: sans-serif;
-    display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px;
-    transition: background var(--transition);
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
 }
 
-.top-controls { width: 100%; max-width: 400px; text-align: right; margin-bottom: 10px; }
-
-#themeBtn {
-    background: none; border: 1px solid var(--border); color: var(--text);
-    padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; cursor: pointer;
+.background-glow {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    height: 400px;
+    background: var(--primary);
+    filter: blur(150px);
+    opacity: 0.15;
+    z-index: -1;
+    transform: translate(-50%, -50%);
 }
 
-#app {
-    width: 100%; max-width: 400px; background: var(--card); padding: 25px;
-    border-radius: 20px; border: 1px solid var(--border); text-align: center;
+.app-container {
+    width: 90%;
+    max-width: 400px;
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 40px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
 }
 
-.fact-box {
-    background: rgba(0, 180, 216, 0.1); border: 1px solid var(--primary);
-    color: var(--primary); padding: 12px; border-radius: 12px; margin: 15px 0;
-    font-size: 0.85rem; text-align: left;
+h1 span { color: var(--primary); }
+
+.main-display {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin: 40px 0;
 }
 
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-.stat-card { background: var(--input); padding: 10px; border-radius: 12px; border: 1px solid var(--border); }
-
-input {
-    width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px;
-    background: var(--input); border: 1px solid var(--border); color: var(--text);
+.circle-progress {
+    position: relative;
+    width: 200px;
+    height: 200px;
 }
 
-button.main-btn {
-    width: 100%; padding: 12px; background: var(--primary); color: white;
-    border: none; border-radius: 10px; font-weight: bold; cursor: pointer;
+svg {
+    width: 200px;
+    height: 200px;
+    transform: rotate(-90deg);
 }
 
-#successModal {
-    display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-    background:rgba(0,0,0,0.8); z-index:100; align-items:center; justify-content:center;
+circle {
+    fill: none;
+    stroke-width: 10;
+    stroke-linecap: round;
+}
+
+circle:nth-child(1) { stroke: rgba(255,255,255,0.1); }
+
+circle:nth-child(2) {
+    stroke: var(--primary);
+    stroke-dasharray: 565;
+    stroke-dashoffset: 565;
+    transition: stroke-dashoffset 1s ease;
+    filter: drop-shadow(0 0 8px var(--primary));
+}
+
+.percentage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#percent-num { font-size: 2.5rem; font-weight: 800; }
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: rgba(255,255,255,0.03);
+    padding: 15px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.add-btn {
+    background: var(--primary);
+    border: none;
+    padding: 15px;
+    border-radius: 15px;
+    color: #000;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.add-btn:hover { transform: scale(1.02); filter: brightness(1.2); }
+
+.reset-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #888;
+    padding: 10px;
+    border-radius: 15px;
+    cursor: pointer;
 }
