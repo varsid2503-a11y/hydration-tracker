@@ -3,144 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Varsid Projects</title>
-    <meta name="description" content="Browse Varsid projects including HydratePro and Racing Limits.">
+    <title>Varsid's Project Hub</title>
     <style>
         :root {
             --primary: #00b4d8;
-            --secondary: #ff6b35;
-            --bg: #090d12;
-            --panel: #151b23;
-            --text: #eef4fb;
-            --muted: #93a4b6;
-            --border: rgba(255, 255, 255, 0.12);
-        }
-
-        * {
-            box-sizing: border-box;
+            --bg: #0b0d11;
+            --card: #161b22;
+            --text: #f0f6fc;
+            --border: #30363d;
         }
 
         body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            padding: 28px 18px;
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--bg);
             color: var(--text);
-            font-family: "Segoe UI", sans-serif;
-            background:
-                radial-gradient(circle at top, rgba(0, 180, 216, 0.16), transparent 26%),
-                radial-gradient(circle at bottom, rgba(255, 107, 53, 0.15), transparent 28%),
-                linear-gradient(180deg, #091019, var(--bg));
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
         }
 
         .container {
-            width: min(100%, 620px);
+            width: 90%;
+            max-width: 500px;
+            padding: 40px 0;
         }
 
-        .hero {
-            margin-bottom: 24px;
-        }
+        h1 { font-size: 2.2rem; color: var(--primary); margin-bottom: 20px; }
 
-        .hero h1 {
-            margin: 0 0 10px;
-            font-size: clamp(2.2rem, 5vw, 3rem);
-            letter-spacing: -0.04em;
-        }
-
-        .hero p {
-            margin: 0;
-            color: var(--muted);
-            line-height: 1.5;
-        }
-
-        .project-list {
-            display: grid;
-            gap: 16px;
-        }
+        .project-list { display: flex; flex-direction: column; gap: 15px; }
 
         .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 20px;
+            text-decoration: none;
+            color: var(--text);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 18px;
-            padding: 24px;
-            border-radius: 24px;
-            border: 1px solid var(--border);
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
-            color: var(--text);
-            text-decoration: none;
-            transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+            transition: 0.3s;
         }
 
-        .card:hover,
-        .card:focus-visible {
+        .card:hover {
+            border-color: var(--primary);
             transform: translateY(-3px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.28);
-            outline: none;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
 
-        .card.hydrate:hover,
-        .card.hydrate:focus-visible {
-            border-color: rgba(0, 180, 216, 0.5);
-        }
-
-        .card.race:hover,
-        .card.race:focus-visible {
-            border-color: rgba(255, 107, 53, 0.5);
-        }
-
-        .card-info h2 {
-            margin: 0 0 6px;
-            font-size: 1.3rem;
-        }
-
-        .card-info p {
-            margin: 0;
-            color: var(--muted);
-        }
-
-        .badge {
-            padding: 8px 12px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.08);
-            color: var(--text);
-            font-size: 0.76rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
+        .card-info h2 { margin: 0; font-size: 1.2rem; color: var(--primary); }
+        .card-info p { margin: 5px 0 0; font-size: 0.85rem; opacity: 0.6; }
     </style>
 </head>
 <body>
-    <main class="container">
-        <section class="hero">
-            <h1>Varsid Projects</h1>
-            <p>Open one of the live mini apps below.</p>
-        </section>
-
-        <section class="project-list" aria-label="Project list">
-            <a href="./HydratePro/" class="card hydrate">
+    <div class="container">
+        <h1>Varsid's Hub</h1>
+        <div class="project-list">
+            <a href="./HydratePro/" class="card">
                 <div class="card-info">
-                    <h2>HydratePro</h2>
-                    <p>Smart calculator and water tracker.</p>
+                    <h2>💧 HydratePro</h2>
+                    <p>Smart Calculator & Water Tracker</p>
                 </div>
-                <span class="badge">Utility</span>
+                <span>→</span>
             </a>
-
-            <a href="./CarRace/" class="card race">
-                <div class="card-info">
-                    <h2>Racing Limits</h2>
-                    <p>High score: <span id="displayBest">0</span></p>
-                </div>
-                <span class="badge">Game</span>
-            </a>
-        </section>
-    </main>
-
-    <script>
-        const best = localStorage.getItem("racingHighScore") || 0;
-        document.getElementById("displayBest").textContent = best;
-    </script>
+        </div>
+    </div>
 </body>
 </html>
