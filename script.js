@@ -1,5 +1,11 @@
 let isLoginMode = true;
 
+window.onload = function() {
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+        window.location.href = "./hub/index.html";
+    }
+};
+
 function toggleMode() {
     isLoginMode = !isLoginMode;
     const title = document.getElementById('form-title');
@@ -23,6 +29,7 @@ function toggleMode() {
 function handleAuth() {
     const user = document.getElementById('username').value;
     const pass = document.getElementById('password').value;
+    const remember = document.getElementById('remember').checked;
     const error = document.getElementById('error-msg');
 
     if (!user || !pass) {
@@ -33,6 +40,10 @@ function handleAuth() {
     if (isLoginMode) {
         const storedPass = localStorage.getItem(`user_${user}`);
         if (storedPass && storedPass === pass) {
+            if (remember) {
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('currentUser', user);
+            }
             window.location.href = "./hub/index.html";
         } else {
             error.innerText = "Invalid username or password";

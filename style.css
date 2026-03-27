@@ -15,6 +15,7 @@ body {
     background-image: radial-gradient(circle at 50% 50%, #001219 0%, #05070a 100%);
     font-family: 'Segoe UI', sans-serif;
     color: var(--text);
+    overflow: hidden;
 }
 
 .auth-card {
@@ -39,7 +40,7 @@ h1 span { color: var(--primary); }
     gap: 15px;
 }
 
-input {
+input[type="text"], input[type="password"] {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 15px;
@@ -54,6 +55,15 @@ input:focus {
     background: rgba(0, 212, 255, 0.05);
 }
 
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #888;
+    text-align: left;
+}
+
 #main-btn {
     width: 100%;
     padding: 15px;
@@ -65,10 +75,7 @@ input:focus {
     font-size: 1rem;
     cursor: pointer;
     box-shadow: 0 10px 20px rgba(0, 212, 255, 0.2);
-    transition: 0.3s;
 }
-
-#main-btn:hover { transform: translateY(-2px); }
 
 .toggle-text { margin-top: 20px; font-size: 0.9rem; color: #888; }
 .toggle-text span { color: var(--primary); cursor: pointer; font-weight: bold; }
