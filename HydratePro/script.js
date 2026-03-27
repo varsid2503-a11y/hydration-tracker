@@ -1,5 +1,6 @@
 const goal = 3500;
 let current = localStorage.getItem('waterCount') ? parseInt(localStorage.getItem('waterCount')) : 0;
+let lastResult = 0;
 
 function updateUI() {
     const progressCircle = document.getElementById('progress-bar');
@@ -21,6 +22,16 @@ function updateUI() {
     else if (percentage < 100) statusText.innerText = "Almost Hydrated";
     else statusText.innerText = "Fully Hydrated!";
 
+    if (percentage >= 100 && lastResult < 100) {
+        confetti({
+            particleCount: 150,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#00d4ff', '#ffffff', '#00ff88']
+        });
+    }
+
+    lastResult = percentage;
     localStorage.setItem('waterCount', current);
 }
 

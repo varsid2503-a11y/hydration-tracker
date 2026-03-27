@@ -119,6 +119,31 @@
         .card-info { text-align: left; flex-grow: 1; }
         .card-info h2 { margin: 0; font-size: 1.3rem; }
         .card-info p { margin: 5px 0 0; font-size: 0.9rem; color: #8b949e; }
+
+        .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text);
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 100;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.light-mode {
+    --bg: #f0f2f5;
+    --card-bg: rgba(255, 255, 255, 0.8);
+    --text: #1c1e21;
+    --primary: #0077b6;
+}
     </style>
 </head>
 <body>
@@ -214,6 +239,14 @@
             });
             requestAnimationFrame(animate);
         }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        }
+// Load saved theme
+        if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
 
         init();
         animate();
