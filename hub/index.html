@@ -52,6 +52,34 @@
             filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.3));
         }
 
+        .user-greeting {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        #welcome-text {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-weight: bold;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        #display-name {
+            font-size: 2.5rem;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        #display-name span {
+            background: linear-gradient(to bottom, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: capitalize;
+        }
+
         .badge {
             padding: 4px 12px;
             border-radius: 50px;
@@ -174,7 +202,10 @@ body.light-mode {
     <canvas id="particleCanvas"></canvas>
 
     <div class="container">
-        <h1>Varsid's Hub</h1>
+        <div class="user-greeting">
+            <p id="welcome-text">SYSTEM ONLINE</p>
+            <h1 id="display-name">Welcome, <span>User</span></h1>
+        </div>
         
         <div class="project-list">
     <a href="./HydratePro/" class="card">
@@ -268,7 +299,22 @@ body.light-mode {
             const isLight = document.body.classList.contains('light-mode');
             localStorage.setItem('theme', isLight ? 'light' : 'dark');
         }
-// Load saved theme
+
+        window.onload = function() {
+            const user = localStorage.getItem('currentUser');
+
+            // Security check: if not logged in, kick them back to login page
+            if (!localStorage.getItem('isLoggedIn')) {
+                window.location.href = "../index.html";
+                return;
+            }
+
+            if (user) {
+                document.querySelector('#display-name span').innerText = user;
+            }
+        };
+
+        // Load saved theme
         if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
 
         function logout() {
