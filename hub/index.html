@@ -81,6 +81,51 @@
                 "move": { "enable": true, "speed": 1 }
             }
         });
+        window.onload = function() {
+    const user = localStorage.getItem('currentUser');
+    const dob = localStorage.getItem('currentDOB'); 
+    
+    if (!localStorage.getItem('isLoggedIn') && !user) {
+        window.location.href = "../index.html";
+        return;
+    }
+
+    if (user) {
+        document.querySelector('#display-name span').innerText = user;
+        checkBirthday(user, dob);
+    }
+};
+
+function checkBirthday(user, dob) {
+    if (!dob) return;
+
+    const today = new Date();
+    const birthDate = new Date(dob);
+    
+    // Check if Month and Day match
+    if (today.getMonth() === birthDate.getMonth() && today.getDate() === birthDate.getDate()) {
+        triggerBirthday(user);
+    }
+}
+
+function triggerBirthday(user) {
+    // Change UI colors to Gold
+    document.documentElement.style.setProperty('--primary', '#ffdb58');
+    document.getElementById('welcome-text').innerText = "HAPPY BIRTHDAY ENGINEER!";
+    
+    // Confetti explosion
+    confetti({
+        particleCount: 200,
+        spread: 100,
+        origin: { y: 0.6 },
+        colors: ['#ffdb58', '#ffffff', '#ff4d4d']
+    });
+
+    // Special Alert
+    setTimeout(() => {
+        alert(`🎂 Happy Birthday, ${user}! Have an amazing day of building!`);
+    }, 500);
+}
     </script>
 </body>
 </html>
