@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Varsid's Engineering Hub</title>
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --bg: #05070a;
+            --card-bg: rgba(22, 27, 34, 0.6);
+            --text: #e6edf3;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden; /* Keeps particles contained */
+        }
+
+        /* Particle Canvas Styling */
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Puts it behind your cards */
+        }
+
+        .container {
+            width: 90%;
+            max-width: 450px;
+            padding: 80px 0;
+            text-align: center;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(to bottom, #fff, var(--primary));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 50px;
+            filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.3));
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 8px;
+            }
+
+/* Green for Live apps */
+    .badge-online {
+        background: rgba(46, 204, 113, 0.15);
+        color: #2ecc71;
+        border: 1px solid rgba(46, 204, 113, 0.3);
+    }
+
+/* Yellow/Orange for "In Development" */
+    .badge-dev {
+        background: rgba(243, 156, 18, 0.15);
+        color: #f39c12;
+        border: 1px solid rgba(243, 156, 18, 0.3);
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
+    }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 30px;
+            text-decoration: none;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-bottom: 20px;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5), 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+
+        .icon-circle {
+            width: 55px;
+            height: 55px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .card-info { text-align: left; flex-grow: 1; }
+        .card-info h2 { margin: 0; font-size: 1.3rem; }
+        .card-info p { margin: 5px 0 0; font-size: 0.9rem; color: #8b949e; }
+
+        .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text);
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 100;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.light-mode {
+    --bg: #f0f2f5;
+    --card-bg: rgba(255, 255, 255, 0.8);
+    --text: #1c1e21;
+    --primary: #0077b6;
+}
+    </style>
+</head>
+<body>
+
+    <canvas id="particleCanvas"></canvas>
+
+    <div class="container">
+        <h1>Varsid's Hub</h1>
+        
+        <div class="project-list">
+    <a href="./HydratePro/" class="card">
+        <div class="icon-circle">💧</div>
+        <div class="card-info">
+            <span class="badge badge-online">● Online</span>
+            <h2>HydratePro</h2>
+            <p>Smart Hydration Assistant</p>
+        </div>
+        <div class="arrow">→</div>
+    </a>
+
+    <a href="./RoboticsLab/" class="card">
+    <div class="icon-circle">🤖</div>
+    <div class="card-info">
+        <span class="badge badge-online">● Online</span>
+        <h2>Robotics Lab</h2>
+        <p>Laser Security Simulation</p>
+    </div>
+    <div class="arrow">→</div>
+</a>
+</div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        // Handle Resize
+        window.addEventListener('resize', resizeCanvas);
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+
+        // Mouse/Touch tracking
+        let mouse = { x: null, y: null };
+        window.addEventListener('mousemove', (e) => { mouse.x = e.x; mouse.y = e.y; });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // Interaction with mouse
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx*dx + dy*dy);
+                if (distance < 100) {
+                    this.x -= dx/20;
+                    this.y -= dy/20;
+                }
+
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(0, 212, 255, 0.5)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            for (let i = 0; i < 80; i++) particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        }
+// Load saved theme
+        if(localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
+
+        init();
+        animate();
+    </script>
+</body>
+</html>
