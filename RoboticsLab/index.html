@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robotics Lab | Laser Sim</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="lab-grid"></div>
+    <div class="lab-container">
+        <header>
+            <h1>Robotics<span>Lab</span></h1>
+            <div class="status-chip" id="system-status">SYSTEM READY</div>
+        </header>
+
+        <div class="simulation-area">
+            <div class="laser-emitter" id="emitter"></div>
+            <div class="laser-beam" id="beam"></div>
+            <div class="laser-receiver" id="receiver"></div>
+            <div class="intruder" id="intruder"></div>
+        </div>
+
+        <div class="control-panel">
+            <div class="sensor-readout">
+                <small>PHOTORESISTOR VALUE</small>
+                <h2 id="lux-value">1024</h2>
+            </div>
+            <button class="action-btn" onmousedown="spawnIntruder()" onmouseup="removeIntruder()">Trigger Intruder</button>
+            <button class="reset-btn" onclick="resetSystem()">Reset Alarm</button>
+        </div>
+    </div>
+    <audio id="alarm-snd" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
+    <script src="script.js"></script>
+</body>
+</html>
