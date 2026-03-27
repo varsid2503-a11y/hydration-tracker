@@ -1,10 +1,118 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta http-equiv="refresh" content="0; url=./HydratePro/">
-    <title>Redirecting to HydratePro</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Varsid's Project Hub</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --primary: #00b4d8;
+            --bg: #0b0d11;
+            --card: #161b22;
+            --text: #f0f6fc;
+            --border: #30363d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 500px;
+            padding: 40px 0;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 { font-size: 2rem; color: var(--primary); margin-bottom: 5px; }
+        .subtitle { opacity: 0.6; font-size: 0.9rem; }
+
+        /* Project Cards */
+        .project-list { display: flex; flex-direction: column; gap: 20px; }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 20px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-info h2 { margin: 0; font-size: 1.2rem; color: var(--primary); }
+        .card-info p { margin: 5px 0 0; font-size: 0.85rem; opacity: 0.7; }
+        .arrow { font-size: 1.5rem; color: var(--primary); opacity: 0.5; }
+
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            font-size: 0.7rem;
+            opacity: 0.4;
+        }
+    </style>
 </head>
 <body>
-    <p>Loading HydratePro... <a href="./HydratePro/index.html">Click here if it doesn't load</a></p>
+
+    <div class="container">
+        <header>
+            <h1 id="welcomeMsg">Varsid's Hub</h1>
+            <p class="subtitle">STEM Projects & Web Apps</p>
+        </header>
+
+        <div class="project-list">
+            <a href="./HydratePro/" class="card">
+                <div class="card-info">
+                    <h2>💧 HydratePro</h2>
+                    <p>Smart Calculator & Water Tracker</p>
+                </div>
+                <div class="arrow">→</div>
+            </a>
+
+            <a href="#" class="card" style="opacity: 0.5; cursor: not-allowed;">
+                <div class="card-info">
+                    <h2>🤖 Robotics Lab</h2>
+                    <p>Arduino & Tinkercad Projects (Coming Soon)</p>
+                </div>
+                <div class="lock">🔒</div>
+            </a>
+        </div>
+    </div>
+
+    <footer>Built by Varsid | 2026</footer>
+
+    <script>
+        // Simple script to greet you based on time
+        const hour = new Date().getHours();
+        const msg = document.getElementById('welcomeMsg');
+        
+        if (hour < 12) msg.innerText = "Good Morning, Varsid!";
+        else if (hour < 18) msg.innerText = "Good Afternoon, Varsid!";
+        else msg.innerText = "Good Evening, Varsid!";
+
+        console.log("Main Menu Loaded Successfully");
+    </script>
 </body>
 </html>
