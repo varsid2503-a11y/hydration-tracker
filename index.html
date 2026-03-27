@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Varsid's Project Hub</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+    <meta name="description" content="Varsid's personal STEM and Web Development portfolio.">
+    <meta name="keywords" content="Varsid, STEM, HydratePro, Robotics, Abacus, Coding, Portfolio">
+
     <style>
         :root {
             --primary: #00b4d8;
@@ -64,8 +65,61 @@
 
         .card-info h2 { margin: 0; font-size: 1.2rem; color: var(--primary); }
         .card-info p { margin: 5px 0 0; font-size: 0.85rem; opacity: 0.7; }
-        .arrow { font-size: 1.5rem; color: var(--primary); opacity: 0.5; }
 
+        /* --- New CSS for the Robotics Icon --- */
+        .card-icon {
+            font-size: 2.5rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            opacity: 0.6;
+            margin-left: 20px;
+            position: relative;
+        }
+
+        .robot-head {
+            border: 3px solid var(--primary);
+            border-radius: 5px;
+            width: 25px;
+            height: 15px;
+            position: relative;
+        }
+
+        .robot-head::before { /* Antenna */
+            content: "";
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            width: 2px;
+            height: 10px;
+            background: var(--primary);
+            transform: translateX(-50%);
+        }
+
+        .robot-head::after { /* Antenna Tip */
+            content: "";
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+            transform: translateX(-50%);
+        }
+
+        .robot-base {
+            border: 3px solid var(--primary);
+            border-radius: 10px;
+            width: 35px;
+            height: 15px;
+            margin-top: 3px;
+        }
+
+        /* --- Footer --- */
         footer {
             margin-top: auto;
             padding: 20px;
@@ -88,7 +142,7 @@
                     <h2>💧 HydratePro</h2>
                     <p>Smart Calculator & Water Tracker</p>
                 </div>
-                <div class="arrow">→</div>
+                <div class="card-icon">💧</div>
             </a>
 
             <a href="#" class="card" style="opacity: 0.5; cursor: not-allowed;">
@@ -96,7 +150,12 @@
                     <h2>🤖 Robotics Lab</h2>
                     <p>Arduino & Tinkercad Projects (Coming Soon)</p>
                 </div>
-                <div class="lock">🔒</div>
+                <div class="card-icon">
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                        <div class="robot-head"></div>
+                        <div class="robot-base"></div>
+                    </div>
+                </div>
             </a>
         </div>
     </div>
