@@ -1,5 +1,6 @@
 let isLoginMode = true;
 
+// Auto-Login check
 window.onload = function() {
     if (localStorage.getItem('isLoggedIn') === 'true') {
         window.location.href = "./hub/index.html";
@@ -42,8 +43,8 @@ function handleAuth() {
         if (storedPass && storedPass === pass) {
             if (remember) {
                 localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('currentUser', user);
             }
+            localStorage.setItem('currentUser', user);
             window.location.href = "./hub/index.html";
         } else {
             error.innerText = "Invalid username or password";
