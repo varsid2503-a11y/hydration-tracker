@@ -4,46 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HydratePro</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root { --primary: #00d4ff; --bg: #05070a; --glass: rgba(255, 255, 255, 0.05); }
+        body { margin: 0; background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 80px; }
+        /* TOP LEFT BUTTON */
+        .back-btn { position: fixed; top: 20px; left: 20px; background: var(--glass); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 10px 18px; border-radius: 12px; text-decoration: none; font-weight: bold; backdrop-filter: blur(10px); transition: 0.3s; }
+        .back-btn:hover { background: rgba(255,255,255,0.15); border-color: var(--primary); }
+        .app-container { width: 90%; max-width: 400px; background: var(--glass); border: 1px solid rgba(255,255,255,0.1); border-radius: 40px; padding: 30px; text-align: center; backdrop-filter: blur(20px); }
+        /* CIRCLE FIX */
+        .circle-progress { position: relative; width: 220px; height: 220px; margin: 20px auto; display: flex; align-items: center; justify-content: center; }
+        svg { width: 220px; height: 220px; transform: rotate(-90deg); overflow: visible; }
+        circle { fill: none; stroke-width: 15; stroke-linecap: round; }
+        circle:nth-child(1) { stroke: rgba(255,255,255,0.05); }
+        #progress-ring { stroke: var(--primary); stroke-dasharray: 565.48; stroke-dashoffset: 565.48; transition: 1s; filter: drop-shadow(0 0 8px var(--primary)); }
+        .percentage { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        #percent-num { font-size: 3.5rem; font-weight: 800; display: block; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 25px 0; }
+        .stat-card { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .controls { display: flex; flex-direction: column; gap: 10px; }
+        .add-btn { background: var(--primary); border: none; padding: 15px; border-radius: 15px; color: black; font-weight: 800; cursor: pointer; transition: 0.2s; }
+        .add-btn:active { transform: scale(0.95); }
+        .reset-btn { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: #888; padding: 10px; border-radius: 12px; cursor: pointer; margin-top: 10px; }
+    </style>
 </head>
 <body>
-    <div class="background-glow"></div>
     <a href="../hub/index.html" class="back-btn">← Main Hub</a>
-    
     <div class="app-container">
-        <header>
-            <h1>Hydrate<span>Pro</span></h1>
-            <p id="current-date"></p>
-        </header>
-
-        <div class="main-display">
-            <div class="circle-progress">
-                <svg>
-                    <circle cx="100" cy="100" r="90"></circle>
-                    <circle id="progress-ring" cx="100" cy="100" r="90"></circle>
-                </svg>
-                <div class="percentage">
-                    <span id="percent-num">0</span>
-                    <p><span id="current-ml">0</span> / 3500ml</p>
-                </div>
+        <h1>Hydrate<span>Pro</span></h1>
+        <div class="circle-progress">
+            <svg viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="90"></circle>
+                <circle id="progress-ring" cx="100" cy="100" r="90"></circle>
+            </svg>
+            <div class="percentage">
+                <span id="percent-num">0</span>
+                <p><span id="current-ml">0</span> / 3500ml</p>
             </div>
         </div>
-
         <div class="stats-grid">
-            <div class="stat-card">
-                <small>REMAINING</small>
-                <h3 id="rem-ml">3500ml</h3>
-            </div>
-            <div class="stat-card">
-                <small>STATUS</small>
-                <h3 id="status-text">Dehydrated</h3>
-            </div>
+            <div class="stat-card"><small>REMAINING</small><h3 id="rem-ml">3500ml</h3></div>
+            <div class="stat-card"><small>STATUS</small><h3 id="status-text">Dehydrated</h3></div>
         </div>
-
         <div class="controls">
             <button class="add-btn" onclick="addWater(250)">+ 250ml Glass</button>
             <button class="add-btn" onclick="addWater(500)">+ 500ml Bottle</button>
-            <button class="reset-btn" onclick="resetWater()">Reset Progress</button>
+            <button class="reset-btn" onclick="resetWater()">Reset</button>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>

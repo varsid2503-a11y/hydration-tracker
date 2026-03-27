@@ -5,314 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Varsid Hub | Dashboard</title>
     <style>
-        :root {
-            --primary: #00d4ff;
-            --bg: #05070a;
-            --card-bg: rgba(22, 27, 34, 0.8);
-            --text: #ffffff;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Segoe UI', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        #particles-js {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        .logout-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 77, 77, 0.1);
-            border: 1px solid rgba(255, 77, 77, 0.3);
-            color: #ff4d4d;
-            padding: 10px 18px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: bold;
-            backdrop-filter: blur(10px);
-            transition: 0.3s;
-            z-index: 1000;
-        }
-
-        .logout-btn:hover {
-            background: #ff4d4d;
-            color: white;
-            box-shadow: 0 0 15px rgba(255, 77, 77, 0.4);
-        }
-
-        .container {
-            width: 90%;
-            max-width: 800px;
-            padding: 60px 0;
-            z-index: 1;
-        }
-
-        .user-greeting {
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        #welcome-text {
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            color: var(--primary);
-            margin-bottom: 5px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        #display-name {
-            font-size: 2.8rem;
-            margin: 0;
-            font-weight: 800;
-            display: flex; /* Aligns cake icon next to name */
-            justify-content: center;
-            align-items: center;
-            gap: 15px; /* Spacing between name and cake */
-        }
-
-        #display-name span {
-            background: linear-gradient(to bottom, #fff, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Birthday Cake Icon Styling */
-        .cake-icon {
-            font-size: 2.5rem;
-            filter: drop-shadow(0 0 10px rgba(255, 219, 88, 0.7)); /* Gold glow */
-        }
-
-        .search-container {
-            margin-bottom: 40px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .search-bar {
-            width: 100%;
-            max-width: 500px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 15px 25px;
-            border-radius: 50px;
-            color: white;
-            font-size: 1rem;
-            outline: none;
-            backdrop-filter: blur(10px);
-            transition: 0.3s;
-            text-align: center;
-        }
-
-        .search-bar:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 25px;
-            text-decoration: none;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            backdrop-filter: blur(10px);
-        }
-
-        .card:hover {
-            transform: translateY(-10px) scale(1.02);
-            border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
-        }
-
-        /* Used for filtering logic */
+        :root { --primary: #00d4ff; --bg: #05070a; --card-bg: rgba(22, 27, 34, 0.8); --text: #ffffff; }
+        body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: -1; }
+        .logout-btn { position: fixed; top: 20px; right: 20px; background: rgba(255, 77, 77, 0.1); border: 1px solid rgba(255, 77, 77, 0.3); color: #ff4d4d; padding: 10px 18px; border-radius: 12px; cursor: pointer; font-weight: bold; backdrop-filter: blur(10px); z-index: 1000; transition: 0.3s; }
+        .logout-btn:hover { background: #ff4d4d; color: white; }
+        .container { width: 90%; max-width: 800px; padding: 60px 0; z-index: 1; }
+        .user-greeting { margin-bottom: 30px; text-align: center; }
+        #display-name { font-size: 2.8rem; margin: 0; font-weight: 800; display: flex; justify-content: center; align-items: center; gap: 15px; }
+        #display-name span { background: linear-gradient(to bottom, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .cake-icon { font-size: 2.5rem; filter: drop-shadow(0 0 10px #ffdb58); }
+        .search-container { margin-bottom: 40px; display: flex; justify-content: center; }
+        .search-bar { width: 100%; max-width: 500px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 15px 25px; border-radius: 50px; color: white; outline: none; backdrop-filter: blur(10px); text-align: center; transition: 0.3s; }
+        .search-bar:focus { border-color: var(--primary); background: rgba(255, 255, 255, 0.08); }
+        .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 25px; text-decoration: none; color: white; display: flex; align-items: center; gap: 20px; transition: 0.4s; backdrop-filter: blur(10px); }
+        .card:hover { transform: translateY(-10px); border-color: var(--primary); }
         .hidden { display: none; }
-
-        .icon-circle {
-            width: 60px;
-            height: 60px;
-            background: rgba(0, 212, 255, 0.1);
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-        }
-
+        .icon-circle { width: 60px; height: 60px; background: rgba(0, 212, 255, 0.1); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; }
         .card-info h2 { margin: 0; font-size: 1.2rem; }
         .card-info p { margin: 5px 0 0; font-size: 0.85rem; opacity: 0.6; }
-
-        .badge {
-            font-size: 0.6rem;
-            text-transform: uppercase;
-            font-weight: bold;
-            padding: 4px 8px;
-            border-radius: 6px;
-            background: rgba(0, 255, 136, 0.2);
-            color: #00ff88;
-            display: inline-block;
-            margin-bottom: 8px;
-        }
+        .badge { font-size: 0.6rem; font-weight: bold; padding: 4px 8px; border-radius: 6px; background: rgba(0, 255, 136, 0.2); color: #00ff88; display: inline-block; margin-bottom: 8px; }
     </style>
 </head>
 <body>
-
     <div id="particles-js"></div>
     <button class="logout-btn" onclick="logout()">Logout ⏻</button>
-
     <div class="container">
         <div class="user-greeting">
             <p id="welcome-text">SYSTEM ONLINE</p>
-            <h1 id="display-name">
-                Welcome, <span>Engineer</span>
-                <div id="cake-placeholder"></div> </h1>
+            <h1 id="display-name">Welcome, <span>Engineer</span><div id="cake-placeholder"></div></h1>
         </div>
-
         <div class="search-container">
             <input type="text" id="projectSearch" class="search-bar" placeholder="Search your lab..." onkeyup="filterProjects()">
         </div>
-
-        <div class="project-grid" id="projectGrid">
+        <div class="project-grid">
             <a href="../HydratePro/index.html" class="card project-card">
                 <div class="icon-circle">💧</div>
-                <div class="card-info">
-                    <span class="badge">● Active</span>
-                    <h2>HydratePro</h2>
-                    <p>Smart Water Tracking System</p>
-                </div>
+                <div class="card-info"><span class="badge">● Active</span><h2>HydratePro</h2><p>Smart Water Tracking System</p></div>
             </a>
-
             <a href="../RoboticsLab/index.html" class="card project-card">
                 <div class="icon-circle">🤖</div>
-                <div class="card-info">
-                    <span class="badge">● Active</span>
-                    <h2>Robotics Lab</h2>
-                    <p>Logic Gate & Laser Simulation</p>
-                </div>
+                <div class="card-info"><span class="badge">● Active</span><h2>Robotics Lab</h2><p>Logic Gate & Laser Simulation</p></div>
             </a>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script>
-        // Security, Personalization & Birthday Logic
         window.onload = function() {
             const user = localStorage.getItem('currentUser');
-            const dob = localStorage.getItem('currentDOB'); // Pulls saved DOB
-            
-            // Security check: if not logged in, kick them back to login page
-            if (!localStorage.getItem('isLoggedIn') && !user) {
-                window.location.href = "../index.html";
-                return;
-            }
-
-            if (user) {
+            const dob = localStorage.getItem('currentDOB');
+            if (!localStorage.getItem('isLoggedIn') && !user) { window.location.href = "../index.html"; return; }
+            if (user) { 
                 document.querySelector('#display-name span').innerText = user;
-                checkBirthday(user, dob); // NEW: Check if today is the day!
-            }
-        };
-
-        function logout() {
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('currentUser');
-            window.location.href = "../index.html";
-        }
-
-        // Project Search Logic
-        function filterProjects() {
-            const input = document.getElementById('projectSearch').value.toLowerCase();
-            const cards = document.getElementsByClassName('project-card');
-
-            for (let i = 0; i < cards.length; i++) {
-                const title = cards[i].querySelector('h2').innerText.toLowerCase();
-                const desc = cards[i].querySelector('p').innerText.toLowerCase();
-                
-                if (title.includes(input) || desc.includes(input)) {
-                    cards[i].classList.remove('hidden');
-                } else {
-                    cards[i].classList.add('hidden');
+                const today = new Date();
+                const bday = new Date(dob);
+                if (today.getMonth() === bday.getMonth() && today.getDate() === bday.getDate()) {
+                    document.documentElement.style.setProperty('--primary', '#ffdb58');
+                    document.getElementById('welcome-text').innerText = "HAPPY BIRTHDAY ENGINEER!";
+                    document.getElementById('cake-placeholder').innerHTML = '<span class="cake-icon">🎂</span>';
+                    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#ffdb58', '#ffffff'] });
                 }
             }
-        }
-
-        // --- NEW BIRTHDAY LOGIC ---
-        function checkBirthday(user, dob) {
-            if (!dob) return; // Exit if user somehow doesn't have a DOB saved
-
-            const today = new Date();
-            const birthDate = new Date(dob);
-            
-            // Check if Month and Day match (ignoring the year)
-            if (today.getMonth() === birthDate.getMonth() && today.getDate() === birthDate.getDate()) {
-                triggerBirthday(user);
+        };
+        function logout() { localStorage.clear(); window.location.href = "../index.html"; }
+        function filterProjects() {
+            const val = document.getElementById('projectSearch').value.toLowerCase();
+            const cards = document.getElementsByClassName('project-card');
+            for (let card of cards) {
+                const text = card.querySelector('h2').innerText.toLowerCase();
+                card.classList.toggle('hidden', !text.includes(val));
             }
         }
-
-        function triggerBirthday(user) {
-            // Change UI colors to Gold/Birthday Theme
-            document.documentElement.style.setProperty('--primary', '#ffdb58');
-            document.getElementById('welcome-text').innerText = "HAPPY BIRTHDAY ENGINEER!";
-            document.getElementById('welcome-text').style.letterSpacing = "5px";
-
-            // INSERT THE CAKE ICON
-            document.getElementById('cake-placeholder').innerHTML = '<span class="cake-icon">🎂</span>';
-            
-            // Confetti explosion (Gold and White)
-            confetti({
-                particleCount: 200,
-                spread: 100,
-                origin: { y: 0.6 },
-                colors: ['#ffdb58', '#ffffff', '#ff4d4d']
-            });
-
-            // Special Birthday Alert (Optional)
-            setTimeout(() => {
-                alert(`🎂 Happy Birthday, ${user}! Have an amazing day of building!`);
-            }, 500);
-        }
-
-        // Particles Config
         particlesJS("particles-js", {
             "particles": {
-                "number": { "value": 80 },
+                "number": { "value": 100 },
+                "size": { "value": 2 }, // SMALL BALLS
                 "color": { "value": "#00d4ff" },
-                "shape": { "type": "circle" },
-                "opacity": { "value": 0.5 },
-                "size": { "value": 3 },
-                "line_linked": {
-                    "enable": true,
-                    "distance": 150,
-                    "color": "#00d4ff",
-                    "opacity": 0.2,
-                    "width": 1
-                },
-                "move": { "enable": true, "speed": 2 }
+                "line_linked": { "enable": true, "distance": 120, "opacity": 0.1 },
+                "move": { "enable": true, "speed": 1 }
             }
         });
     </script>
