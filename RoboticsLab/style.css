@@ -16,6 +16,32 @@ body {
     height: 100vh;
 }
 
+.hub-link {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 5;
+    padding: 12px 18px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.14);
+    background: linear-gradient(180deg, rgba(18, 22, 30, 0.92), rgba(8, 10, 14, 0.82));
+    box-shadow: 0 18px 34px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08);
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    backdrop-filter: blur(14px);
+    transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.hub-link:hover,
+.hub-link:focus-visible {
+    transform: translateY(-2px);
+    border-color: rgba(0, 212, 255, 0.45);
+    box-shadow: 0 18px 34px rgba(0,0,0,0.34), 0 0 22px rgba(0, 212, 255, 0.14);
+    outline: none;
+}
+
 .lab-grid {
     position: fixed;
     width: 100%;
@@ -122,3 +148,16 @@ body {
 }
 
 .mode-btn:hover { border-color: var(--primary); }
+
+@media (max-width: 560px) {
+    body {
+        height: auto;
+        min-height: 100vh;
+        padding: 76px 0 20px;
+    }
+
+    .hub-link {
+        top: 14px;
+        left: 14px;
+    }
+}
