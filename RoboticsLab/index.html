@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Robotics Lab | Logic Gates</title>
+    <title>LogicLab | Advanced</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,17 +14,19 @@
             <div class="status-chip" id="gate-name">AND GATE</div>
         </header>
 
+        <div class="counter-display">
+            <small>LOGIC TRIGGERS</small>
+            <h2 id="binary-count">0000</h2>
+        </div>
+
         <div class="circuit-area">
-            <div class="inputs">
+            <div class="inputs" id="input-container">
                 <div class="switch-node" id="sw-a" onclick="toggleSwitch('a')">OFF</div>
                 <div class="switch-node" id="sw-b" onclick="toggleSwitch('b')">OFF</div>
             </div>
             
             <div class="gate-visual">
-                <div class="wire-path" id="wire-a"></div>
-                <div class="wire-path" id="wire-b"></div>
-                <div class="gate-body">D</div>
-                <div class="wire-out" id="wire-out"></div>
+                <div class="gate-body" id="gate-shape">D</div>
             </div>
 
             <div class="output">
@@ -34,8 +36,9 @@
         </div>
 
         <div class="control-panel">
-            <button class="mode-btn" onclick="setGate('AND')">AND Gate</button>
-            <button class="mode-btn" onclick="setGate('OR')">OR Gate</button>
+            <button class="mode-btn" onclick="setGate('AND')">AND</button>
+            <button class="mode-btn" onclick="setGate('OR')">OR</button>
+            <button class="mode-btn" onclick="setGate('NOT')">NOT</button>
         </div>
     </div>
     <script src="script.js"></script>
