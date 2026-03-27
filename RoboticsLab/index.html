@@ -3,34 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Robotics Lab | Laser Sim</title>
+    <title>Robotics Lab | Logic Gates</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="lab-grid"></div>
     <div class="lab-container">
         <header>
-            <h1>Robotics<span>Lab</span></h1>
-            <div class="status-chip" id="system-status">SYSTEM READY</div>
+            <h1>Logic<span>Lab</span></h1>
+            <div class="status-chip" id="gate-name">AND GATE</div>
         </header>
 
-        <div class="simulation-area">
-            <div class="laser-emitter" id="emitter"></div>
-            <div class="laser-beam" id="beam"></div>
-            <div class="laser-receiver" id="receiver"></div>
-            <div class="intruder" id="intruder"></div>
+        <div class="circuit-area">
+            <div class="inputs">
+                <div class="switch-node" id="sw-a" onclick="toggleSwitch('a')">OFF</div>
+                <div class="switch-node" id="sw-b" onclick="toggleSwitch('b')">OFF</div>
+            </div>
+            
+            <div class="gate-visual">
+                <div class="wire-path" id="wire-a"></div>
+                <div class="wire-path" id="wire-b"></div>
+                <div class="gate-body">D</div>
+                <div class="wire-out" id="wire-out"></div>
+            </div>
+
+            <div class="output">
+                <div class="led-bulb" id="output-led"></div>
+                <small>OUTPUT</small>
+            </div>
         </div>
 
         <div class="control-panel">
-            <div class="sensor-readout">
-                <small>PHOTORESISTOR VALUE</small>
-                <h2 id="lux-value">1024</h2>
-            </div>
-            <button class="action-btn" onmousedown="spawnIntruder()" onmouseup="removeIntruder()">Trigger Intruder</button>
-            <button class="reset-btn" onclick="resetSystem()">Reset Alarm</button>
+            <button class="mode-btn" onclick="setGate('AND')">AND Gate</button>
+            <button class="mode-btn" onclick="setGate('OR')">OR Gate</button>
         </div>
     </div>
-    <audio id="alarm-snd" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
     <script src="script.js"></script>
 </body>
 </html>
