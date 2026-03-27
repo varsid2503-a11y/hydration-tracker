@@ -5,26 +5,27 @@
     --text: #ffffff;
 }
 
-/* 1. Allow the body to scroll naturally */
-html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    min-height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto !important; 
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Segoe UI', sans-serif;
-    -webkit-overflow-scrolling: touch; 
+/* THE NUCLEAR RESET */
+html {
+    height: -webkit-fill-available; /* Fix for mobile browser address bars */
+    overflow-y: scroll !important; /* Force a scrollbar to exist */
 }
 
-/* 2. Fix the layout to stack correctly */
 body {
+    margin: 0;
+    padding: 20px 0 100px 0; /* Huge bottom padding to ensure space */
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 0; 
+    min-height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+    overflow-y: auto !important; /* The most important line */
+    touch-action: pan-y !important; /* Forces touchscreens to allow vertical swiping */
+    position: relative;
 }
 
 .background-glow {
@@ -41,7 +42,6 @@ body {
     pointer-events: none;
 }
 
-/* 3. Ensure the app container doesn't get cut off */
 .app-container {
     width: 90%;
     max-width: 400px;
@@ -53,29 +53,22 @@ body {
     padding: 30px;
     text-align: center;
     box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-    position: relative;
-    margin-bottom: 50px; 
+    /* Remove any fixed heights */
+    height: auto !important; 
+    margin-bottom: 20px;
 }
 
-h1 { margin-top: 0; font-size: 1.8rem; }
-h1 span { color: var(--primary); }
-
-.main-display {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    margin: 30px 0;
-}
-
+/* Adjust Circle size for small screens to prevent overflow */
 .circle-progress {
     position: relative;
-    width: 200px;
-    height: 200px;
+    width: 180px;
+    height: 180px;
+    margin: 0 auto;
 }
 
 svg {
-    width: 200px;
-    height: 200px;
+    width: 180px;
+    height: 180px;
     transform: rotate(-90deg);
 }
 
@@ -91,8 +84,7 @@ circle:nth-child(2) {
     stroke: var(--primary);
     stroke-dasharray: 565;
     stroke-dashoffset: 565;
-    transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1);
-    filter: drop-shadow(0 0 8px var(--primary));
+    transition: stroke-dashoffset 1s ease;
 }
 
 .percentage {
@@ -103,14 +95,13 @@ circle:nth-child(2) {
     width: 100%;
 }
 
-#percent-num { font-size: 3rem; font-weight: 800; display: block; line-height: 1; }
-.percentage p { margin: 5px 0 0; font-size: 0.8rem; opacity: 0.6; }
+#percent-num { font-size: 2.5rem; font-weight: 800; }
 
 .stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 25px;
+    gap: 10px;
+    margin-top: 30px;
 }
 
 .stat-card {
@@ -124,6 +115,7 @@ circle:nth-child(2) {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    margin-top: 20px;
 }
 
 .add-btn {
@@ -133,9 +125,7 @@ circle:nth-child(2) {
     border-radius: 20px;
     color: #000;
     font-weight: 800;
-    font-size: 1rem;
     cursor: pointer;
-    box-shadow: 0 10px 20px rgba(0, 212, 255, 0.2);
 }
 
 .reset-btn {
@@ -145,6 +135,4 @@ circle:nth-child(2) {
     padding: 12px;
     border-radius: 15px;
     cursor: pointer;
-    font-size: 0.8rem;
-    margin-top: 10px;
 }
