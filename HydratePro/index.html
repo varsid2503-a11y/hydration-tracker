@@ -25,12 +25,19 @@
         .add-btn { background: var(--primary); border: none; padding: 15px; border-radius: 15px; color: black; font-weight: 800; cursor: pointer; transition: 0.2s; }
         .add-btn:active { transform: scale(0.95); }
         .reset-btn { background: transparent; border: 1px solid rgba(255,255,255,0.1); color: #888; padding: 10px; border-radius: 12px; cursor: pointer; margin-top: 10px; }
+        .climate-alert { background: linear-gradient(135deg, rgba(255, 130, 70, 0.15), rgba(255, 90, 50, 0.15)); border: 1px solid rgba(255, 130, 70, 0.4); padding: 10px 15px; border-radius: 15px; margin-bottom: 15px; font-size: 0.85rem; font-weight: 600; color: #ffb088; display: flex; align-items: center; gap: 8px; }
+        .climate-alert::before { content: '🔥'; font-size: 1.2rem; }
+        .hidden { display: none !important; }
+        .weather-info { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 15px; margin-bottom: 15px; font-size: 0.9rem; color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.05); }
+        .heat-mode { --primary: #ff8246 !important; }
     </style>
 </head>
 <body>
     <a href="../hub/index.html" class="back-btn">← Main Hub</a>
     <div class="app-container">
         <h1>Hydrate<span>Pro</span></h1>
+        <div id="climate-alert" class="climate-alert hidden"></div>
+        <div id="weather-info" class="weather-info"></div>
         <div class="circle-progress">
             <svg viewBox="0 0 200 200">
                 <circle cx="100" cy="100" r="90"></circle>
@@ -38,7 +45,7 @@
             </svg>
             <div class="percentage">
                 <span id="percent-num">0</span>
-                <p><span id="current-ml">0</span> / 3500ml</p>
+                <p><span id="current-ml">0</span> / <span id="goal-display">3500</span>ml</p>
             </div>
         </div>
         <div class="stats-grid">
