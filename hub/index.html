@@ -25,7 +25,6 @@
             overflow-x: hidden;
         }
 
-        /* Background Particles Canvas Area */
         #particles-js {
             position: fixed;
             width: 100%;
@@ -58,22 +57,13 @@
         .container {
             width: 90%;
             max-width: 800px;
-            padding: 80px 0;
+            padding: 60px 0;
             z-index: 1;
         }
 
         .user-greeting {
-            margin-bottom: 50px;
+            margin-bottom: 30px;
             text-align: center;
-        }
-
-        #welcome-text {
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            color: var(--primary);
-            margin-bottom: 5px;
-            font-weight: bold;
-            text-transform: uppercase;
         }
 
         #display-name {
@@ -87,6 +77,34 @@
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+
+        /* --- NEW SEARCH STYLES --- */
+        .search-container {
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-bar {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: 50px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        .search-bar:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .project-grid {
@@ -110,19 +128,18 @@
         }
 
         .card:hover {
-            transform: translateY(-10px) scale(1.02);
+            transform: translateY(-10px);
             border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
         }
 
+        /* Used for filtering logic */
+        .hidden { display: none; }
+
         .icon-circle {
-            width: 60px;
-            height: 60px;
+            width: 60px; height: 60px;
             background: rgba(0, 212, 255, 0.1);
             border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             font-size: 1.8rem;
         }
 
@@ -131,7 +148,6 @@
 
         .badge {
             font-size: 0.6rem;
-            text-transform: uppercase;
             font-weight: bold;
             padding: 4px 8px;
             border-radius: 6px;
@@ -149,12 +165,15 @@
 
     <div class="container">
         <div class="user-greeting">
-            <p id="welcome-text">SYSTEM ONLINE</p>
             <h1 id="display-name">Welcome, <span>Engineer</span></h1>
         </div>
 
-        <div class="project-grid">
-            <a href="../HydratePro/index.html" class="card">
+        <div class="search-container">
+            <input type="text" id="projectSearch" class="search-bar" placeholder="Search your lab..." onkeyup="filterProjects()">
+        </div>
+
+        <div class="project-grid" id="projectGrid">
+            <a href="../HydratePro/index.html" class="card project-card">
                 <div class="icon-circle">💧</div>
                 <div class="card-info">
                     <span class="badge">● Active</span>
@@ -163,7 +182,7 @@
                 </div>
             </a>
 
-            <a href="../RoboticsLab/index.html" class="card">
+            <a href="../RoboticsLab/index.html" class="card project-card">
                 <div class="icon-circle">🤖</div>
                 <div class="card-info">
                     <span class="badge">● Active</span>
@@ -177,7 +196,6 @@
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     
     <script>
-        // Security & Personalization
         window.onload = function() {
             const user = localStorage.getItem('currentUser');
             if (!localStorage.getItem('isLoggedIn') && !user) {
@@ -195,21 +213,27 @@
             window.location.href = "../index.html";
         }
 
-        // Particles Config
+        // --- NEW SEARCH LOGIC ---
+        function filterProjects() {
+            const input = document.getElementById('projectSearch').value.toLowerCase();
+            const cards = document.getElementsByClassName('project-card');
+
+            for (let i = 0; i < cards.length; i++) {
+                const title = cards[i].querySelector('h2').innerText.toLowerCase();
+                const desc = cards[i].querySelector('p').innerText.toLowerCase();
+                
+                if (title.includes(input) || desc.includes(input)) {
+                    cards[i].classList.remove('hidden');
+                } else {
+                    cards[i].classList.add('hidden');
+                }
+            }
+        }
+
         particlesJS("particles-js", {
             "particles": {
                 "number": { "value": 80 },
                 "color": { "value": "#00d4ff" },
-                "shape": { "type": "circle" },
-                "opacity": { "value": 0.5 },
-                "size": { "value": 3 },
-                "line_linked": {
-                    "enable": true,
-                    "distance": 150,
-                    "color": "#00d4ff",
-                    "opacity": 0.2,
-                    "width": 1
-                },
                 "move": { "enable": true, "speed": 2 }
             }
         });
