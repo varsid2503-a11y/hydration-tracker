@@ -3,36 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HydratePro | Ultra</title>
+    <title>HydratePro</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="background-glow"></div>
-    <a class="hub-link" href="../index.html">← Main Hub</a>
+    <a href="../hub/index.html" class="back-btn">← Main Hub</a>
+    
     <div class="app-container">
         <header>
             <h1>Hydrate<span>Pro</span></h1>
-            <p id="date-display"></p>
+            <p id="current-date"></p>
         </header>
 
         <div class="main-display">
             <div class="circle-progress">
                 <svg>
                     <circle cx="100" cy="100" r="90"></circle>
-                    <circle id="progress-bar" cx="100" cy="100" r="90"></circle>
+                    <circle id="progress-ring" cx="100" cy="100" r="90"></circle>
                 </svg>
                 <div class="percentage">
-                    <span id="percent-num">0</span>%
+                    <span id="percent-num">0</span>
                     <p><span id="current-ml">0</span> / 3500ml</p>
                 </div>
-                <div class="water-wave" id="wave"></div>
             </div>
         </div>
 
         <div class="stats-grid">
             <div class="stat-card">
                 <small>REMAINING</small>
-                <h3 id="remain-ml">3500ml</h3>
+                <h3 id="rem-ml">3500ml</h3>
             </div>
             <div class="stat-card">
                 <small>STATUS</small>
@@ -41,9 +41,9 @@
         </div>
 
         <div class="controls">
-            <button class="add-btn" onclick="addWater(250)">+ 250ml</button>
-            <button class="add-btn" onclick="addWater(500)">+ 500ml</button>
-            <button class="reset-btn" onclick="resetWater()">Reset</button>
+            <button class="add-btn" onclick="addWater(250)">+ 250ml Glass</button>
+            <button class="add-btn" onclick="addWater(500)">+ 500ml Bottle</button>
+            <button class="reset-btn" onclick="resetWater()">Reset Progress</button>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>

@@ -6,8 +6,6 @@
     <title>Varsid Hub | Access</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="https://img.icons8.com/neon/96/00d4ff/circuit.png">
-
-<link rel="apple-touch-icon" href="https://img.icons8.com/neon/180/00d4ff/circuit.png">
 </head>
 <body>
     <div class="auth-card">
@@ -15,26 +13,20 @@
             <h1 id="form-title">Welcome<span>Back</span></h1>
             <p id="form-subtext">Enter your credentials to access the hub</p>
         </div>
-
         <div class="input-group">
             <input type="text" id="username" placeholder="Username" required>
             <input type="password" id="password" placeholder="Password" required>
-            
             <div class="remember-me">
                 <input type="checkbox" id="remember">
                 <label for="remember">Remember Me</label>
             </div>
         </div>
-
         <button id="main-btn" onclick="handleAuth()">Login</button>
-        
         <div class="toggle-text">
             <p id="toggle-msg">Don't have an account? <span onclick="toggleMode()">Create Account</span></p>
         </div>
-        
         <div id="error-msg" class="error"></div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>

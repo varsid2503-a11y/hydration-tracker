@@ -4,177 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Varsid Hub | Dashboard</title>
-    <link rel="icon" type="image/png" href="https://img.icons8.com/neon/96/00d4ff/circuit.png">
-
-<link rel="apple-touch-icon" href="https://img.icons8.com/neon/180/00d4ff/circuit.png">
     <style>
-        :root {
-            --primary: #00d4ff;
-            --bg: #05070a;
-            --card-bg: rgba(22, 27, 34, 0.8);
-            --text: #ffffff;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Segoe UI', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        #particles-js {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        .logout-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 77, 77, 0.1);
-            border: 1px solid rgba(255, 77, 77, 0.3);
-            color: #ff4d4d;
-            padding: 10px 18px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: bold;
-            backdrop-filter: blur(10px);
-            transition: 0.3s;
-            z-index: 1000;
-        }
-
-        .logout-btn:hover {
-            background: #ff4d4d;
-            color: white;
-            box-shadow: 0 0 15px rgba(255, 77, 77, 0.4);
-        }
-
-        .container {
-            width: 90%;
-            max-width: 800px;
-            padding: 60px 0;
-            z-index: 1;
-        }
-
-        .user-greeting {
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        #display-name {
-            font-size: 2.8rem;
-            margin: 0;
-            font-weight: 800;
-        }
-
-        #display-name span {
-            background: linear-gradient(to bottom, #fff, var(--primary));
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* --- NEW SEARCH STYLES --- */
-        .search-container {
-            margin-bottom: 40px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .search-bar {
-            width: 100%;
-            max-width: 500px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 15px 25px;
-            border-radius: 50px;
-            color: white;
-            font-size: 1rem;
-            outline: none;
-            backdrop-filter: blur(10px);
-            transition: 0.3s;
-            text-align: center;
-        }
-
-        .search-bar:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 25px;
-            text-decoration: none;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            backdrop-filter: blur(10px);
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-        }
-
-        /* Used for filtering logic */
+        :root { --primary: #00d4ff; --bg: #05070a; --card-bg: rgba(22, 27, 34, 0.8); --text: #ffffff; }
+        body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: -1; }
+        .logout-btn { position: fixed; top: 20px; right: 20px; background: rgba(255, 77, 77, 0.1); border: 1px solid rgba(255, 77, 77, 0.3); color: #ff4d4d; padding: 10px 18px; border-radius: 12px; cursor: pointer; font-weight: bold; backdrop-filter: blur(10px); z-index: 1000; transition: 0.3s; }
+        .logout-btn:hover { background: #ff4d4d; color: white; }
+        .container { width: 90%; max-width: 800px; padding: 60px 0; z-index: 1; }
+        .user-greeting { margin-bottom: 30px; text-align: center; }
+        #display-name { font-size: 2.8rem; margin: 0; font-weight: 800; }
+        #display-name span { background: linear-gradient(to bottom, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .search-container { margin-bottom: 40px; display: flex; justify-content: center; }
+        .search-bar { width: 100%; max-width: 500px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 15px 25px; border-radius: 50px; color: white; outline: none; backdrop-filter: blur(10px); text-align: center; }
+        .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: var(--card-bg); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 25px; text-decoration: none; color: white; display: flex; align-items: center; gap: 20px; transition: 0.4s; backdrop-filter: blur(10px); }
+        .card:hover { transform: translateY(-10px); border-color: var(--primary); }
         .hidden { display: none; }
-
-        .icon-circle {
-            width: 60px; height: 60px;
-            background: rgba(0, 212, 255, 0.1);
-            border-radius: 18px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.8rem;
-        }
-
+        .icon-circle { width: 60px; height: 60px; background: rgba(0, 212, 255, 0.1); border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; }
         .card-info h2 { margin: 0; font-size: 1.2rem; }
         .card-info p { margin: 5px 0 0; font-size: 0.85rem; opacity: 0.6; }
-
-        .badge {
-            font-size: 0.6rem;
-            font-weight: bold;
-            padding: 4px 8px;
-            border-radius: 6px;
-            background: rgba(0, 255, 136, 0.2);
-            color: #00ff88;
-            display: inline-block;
-            margin-bottom: 8px;
-        }
+        .badge { font-size: 0.6rem; font-weight: bold; padding: 4px 8px; border-radius: 6px; background: rgba(0, 255, 136, 0.2); color: #00ff88; display: inline-block; margin-bottom: 8px; }
     </style>
 </head>
 <body>
-
     <div id="particles-js"></div>
     <button class="logout-btn" onclick="logout()">Logout ⏻</button>
-
     <div class="container">
         <div class="user-greeting">
             <h1 id="display-name">Welcome, <span>Engineer</span></h1>
         </div>
-
         <div class="search-container">
             <input type="text" id="projectSearch" class="search-bar" placeholder="Search your lab..." onkeyup="filterProjects()">
         </div>
-
         <div class="project-grid" id="projectGrid">
             <a href="../HydratePro/index.html" class="card project-card">
                 <div class="icon-circle">💧</div>
@@ -184,7 +45,6 @@
                     <p>Smart Water Tracking System</p>
                 </div>
             </a>
-
             <a href="../RoboticsLab/index.html" class="card project-card">
                 <div class="icon-circle">🤖</div>
                 <div class="card-info">
@@ -195,49 +55,30 @@
             </a>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    
     <script>
         window.onload = function() {
             const user = localStorage.getItem('currentUser');
-            if (!localStorage.getItem('isLoggedIn') && !user) {
-                window.location.href = "../index.html";
-                return;
-            }
-            if (user) {
-                document.querySelector('#display-name span').innerText = user;
-            }
+            if (!localStorage.getItem('isLoggedIn') && !user) { window.location.href = "../index.html"; return; }
+            if (user) { document.querySelector('#display-name span').innerText = user; }
         };
-
-        function logout() {
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('currentUser');
-            window.location.href = "../index.html";
-        }
-
-        // --- NEW SEARCH LOGIC ---
+        function logout() { localStorage.removeItem('isLoggedIn'); localStorage.removeItem('currentUser'); window.location.href = "../index.html"; }
         function filterProjects() {
             const input = document.getElementById('projectSearch').value.toLowerCase();
             const cards = document.getElementsByClassName('project-card');
-
             for (let i = 0; i < cards.length; i++) {
                 const title = cards[i].querySelector('h2').innerText.toLowerCase();
-                const desc = cards[i].querySelector('p').innerText.toLowerCase();
-                
-                if (title.includes(input) || desc.includes(input)) {
-                    cards[i].classList.remove('hidden');
-                } else {
-                    cards[i].classList.add('hidden');
-                }
+                if (title.includes(input)) { cards[i].classList.remove('hidden'); } 
+                else { cards[i].classList.add('hidden'); }
             }
         }
-
         particlesJS("particles-js", {
             "particles": {
-                "number": { "value": 80 },
+                "number": { "value": 100 },
                 "color": { "value": "#00d4ff" },
-                "move": { "enable": true, "speed": 2 }
+                "size": { "value": 1.5 },
+                "line_linked": { "enable": true, "distance": 120, "color": "#00d4ff", "opacity": 0.1 },
+                "move": { "enable": true, "speed": 1 }
             }
         });
     </script>
